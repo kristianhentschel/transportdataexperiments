@@ -11,8 +11,10 @@ public class TOCSpecificInterchangeTimesRecord extends CommaSeparatedValuesRecor
 
         // The first four fields are mandatory
         if (getRawValuesLength() < 4) {
-            // TODO: throw an error
+            // TODO: throw a more descriptive error if the mandatory fields are unfilled.
+            throw new IndexOutOfBoundsException();
         }
+
         setField("station_code", getRawValue(0));
         setField("arriving_train_toc", getRawValue(1));
         setField("departing_train_toc", getRawValue(2));
