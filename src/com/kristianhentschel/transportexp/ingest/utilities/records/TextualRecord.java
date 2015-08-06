@@ -11,8 +11,8 @@ import java.util.Map;
  * parse the fields as appropriate, and make it available by a name from the file format documentation.
  */
 public abstract class TextualRecord {
-    private String record_text;
-    private Map<String, String> fields;
+    private final String record_text;
+    private final Map<String, String> fields;
 
     public TextualRecord(String record_text) {
         this.record_text = record_text;

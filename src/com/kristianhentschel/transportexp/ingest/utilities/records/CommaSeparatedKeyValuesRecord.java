@@ -7,7 +7,7 @@ import java.util.Map;
  * Created by Kristian on 06/08/2015.
  */
 public abstract class CommaSeparatedKeyValuesRecord extends CommaSeparatedValuesRecord {
-    private Map<String, String> raw_values;
+    private final Map<String, String> raw_values;
 
     public CommaSeparatedKeyValuesRecord(String record_text) {
         super(record_text);

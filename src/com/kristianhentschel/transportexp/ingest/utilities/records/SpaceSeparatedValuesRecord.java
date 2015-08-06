@@ -5,7 +5,7 @@ package com.kristianhentschel.transportexp.ingest.utilities.records;
  */
 public abstract class SpaceSeparatedValuesRecord extends TextualRecord{
     private int index;
-    private String[] words;
+    private final String[] words;
 
     public SpaceSeparatedValuesRecord(String record_text) {
         super(record_text);

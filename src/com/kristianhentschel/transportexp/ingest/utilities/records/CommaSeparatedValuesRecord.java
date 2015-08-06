@@ -4,7 +4,7 @@ package com.kristianhentschel.transportexp.ingest.utilities.records;
  * Created by Kristian on 05/08/2015.
  */
 public abstract class CommaSeparatedValuesRecord extends TextualRecord {
-    private String[] raw_values;
+    private final String[] raw_values;
 
     public CommaSeparatedValuesRecord(String record_text) {
         super(record_text);

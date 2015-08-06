@@ -14,7 +14,7 @@ import java.util.Locale;
  * ATOC document RSPS5041 Version 06-00 (Section 3.2.7.2).
  */
 public class AdditionalFixedLinksRecord extends CommaSeparatedKeyValuesRecord {
-    public static enum MODE {BUS, TUBE, WALK, FERRY, METRO, TRAM, TAXI, TRANSFER};
+    public enum MODE {BUS, TUBE, WALK, FERRY, METRO, TRAM, TAXI, TRANSFER}
     private static DateFormat running_dates_format;
 
     private MODE mode;

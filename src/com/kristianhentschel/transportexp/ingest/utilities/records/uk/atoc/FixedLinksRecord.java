@@ -8,7 +8,7 @@ import com.kristianhentschel.transportexp.ingest.utilities.records.SpaceSeparate
 public class FixedLinksRecord extends SpaceSeparatedValuesRecord {
 
     // TODO extract a more general ATOC fixed link mode enum (also in AdditionalFixedLinksRecord)
-    public enum MODE {BUS, TUBE, WALK, FERRY, METRO, TRANSFER} ;
+    public enum MODE {BUS, TUBE, WALK, FERRY, METRO, TRANSFER}
 
     private MODE mode;
     private String origin;
