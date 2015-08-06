@@ -3,7 +3,7 @@ package com.kristianhentschel.transportexp.ingest.utilities.records;
 /**
  * Created by Kristian on 06/08/2015.
  */
-public class SpaceSeparatedValuesRecord extends TextualRecord{
+public abstract class SpaceSeparatedValuesRecord extends TextualRecord{
     private int index;
     private String[] words;
 
