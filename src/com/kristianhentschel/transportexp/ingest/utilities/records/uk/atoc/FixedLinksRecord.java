@@ -1,4 +1,4 @@
-package com.kristianhentschel.transportexp.ingest.utilities.records.UnitedKingdomATOC;
+package com.kristianhentschel.transportexp.ingest.utilities.records.uk.atoc;
 
 import com.kristianhentschel.transportexp.ingest.utilities.records.SpaceSeparatedValuesRecord;
 

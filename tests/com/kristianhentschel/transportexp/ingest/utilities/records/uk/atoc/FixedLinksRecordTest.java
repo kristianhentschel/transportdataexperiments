@@ -1,4 +1,4 @@
-package com.kristianhentschel.transportexp.ingest.utilities.records.UnitedKingdomATOC;
+package com.kristianhentschel.transportexp.ingest.utilities.records.uk.atoc;
 
 import org.junit.Test;
 
@@ -16,7 +16,7 @@ public class FixedLinksRecordTest {
         assertEquals("METRO",   dut.getField("mode"));
         assertEquals("ALT",     dut.getField("origin"));
         assertEquals("BUR",     dut.getField("destination"));
-        assertEquals("63",      dut.getField("time"));
+        assertEquals("63", dut.getField("time"));
     }
 
     @Test
