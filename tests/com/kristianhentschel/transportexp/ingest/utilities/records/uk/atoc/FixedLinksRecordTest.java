@@ -13,10 +13,10 @@ public class FixedLinksRecordTest {
         String input = "ADDITIONAL LINK: METRO BETWEEN ALT AND BUR IN 63 MINUTES";
         FixedLinksRecord dut = new FixedLinksRecord(input);
 
-        assertEquals("METRO",   dut.getField("mode"));
-        assertEquals("ALT",     dut.getField("origin"));
-        assertEquals("BUR",     dut.getField("destination"));
-        assertEquals("63", dut.getField("time"));
+        assertEquals(FixedLinksRecord.MODE.METRO, dut.getMode());
+        assertEquals("ALT", dut.getOrigin());
+        assertEquals("BUR", dut.getDestination());
+        assertEquals(63, dut.getTime());
     }
 
     @Test
@@ -24,10 +24,7 @@ public class FixedLinksRecordTest {
         String input = "ADDITIONAL LINK: WALK BETWEEN ABR AND ACY IN 3 MINUTES";
         FixedLinksRecord dut = new FixedLinksRecord(input);
 
-        assertEquals("WALK",    dut.getField("mode"));
-        assertEquals("ABR",     dut.getField("origin"));
-        assertEquals("ACY",     dut.getField("destination"));
-        assertEquals("3",       dut.getField("time"));
+        assertEquals(3, dut.getTime());
     }
 
 }
