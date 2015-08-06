@@ -19,11 +19,13 @@ public abstract class TextualRecord {
         this.fields = new HashMap<String, String>();
     }
 
+    @Deprecated
     public String getField(String name) {
         // TODO: handle "requested field may not be set".
         return this.fields.get(name);
     }
 
+    @Deprecated
     protected void setField(String key, String value) {
         fields.put(key, value);
     }
