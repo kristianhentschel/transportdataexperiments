@@ -95,31 +95,31 @@ public class CifAssociationRecord extends AbstractCifRecord {
         return type;
     }
 
-    public void setTransactionType(String transaction_type) {
+    private void setTransactionType(String transaction_type) {
         this.transaction_type = parseTransactionType(transaction_type);
     }
 
-    public void setMainTrainUid(String main_train_uid) {
+    private void setMainTrainUid(String main_train_uid) {
         this.main_train_uid = main_train_uid;
     }
 
-    public void setAssociatedTrainUid(String associated_train_uid) {
+    private void setAssociatedTrainUid(String associated_train_uid) {
         this.associated_train_uid = associated_train_uid;
     }
 
-    public void setStartDate(String start_date) {
+    private void setStartDate(String start_date) {
         this.start_date = start_date;
     }
 
-    public void setEndDate(String end_date) {
+    private void setEndDate(String end_date) {
         this.end_date = end_date;
     }
 
-    public void setDays(String days) {
+    private void setDays(String days) {
         this.days = days;
     }
 
-    public void setCategory(String category) {
+    private void setCategory(String category) {
         switch (category) {
             case "JJ":
                 this.category = CATEGORY.JOIN;
@@ -135,7 +135,7 @@ public class CifAssociationRecord extends AbstractCifRecord {
         }
     }
 
-    public void setDateInd(String date_ind) {
+    private void setDateInd(String date_ind) {
         switch (date_ind) {
             case "S":
                 this.date_ind = DATE_IND.STANDARD;
@@ -151,19 +151,19 @@ public class CifAssociationRecord extends AbstractCifRecord {
         }
     }
 
-    public void setLocation(String location) {
+    private void setLocation(String location) {
         this.location = location;
     }
 
-    public void setBaseLocSuffix(String base_loc_suffix) {
+    private void setBaseLocSuffix(String base_loc_suffix) {
         this.base_loc_suffix = base_loc_suffix;
     }
 
-    public void setAssocLocSuffix(String assoc_loc_suffix) {
+    private void setAssocLocSuffix(String assoc_loc_suffix) {
         this.assoc_loc_suffix = assoc_loc_suffix;
     }
 
-    public void setType(String type) {
+    private void setType(String type) {
         switch (type) {
             case "P":
                 this.type = TYPE.PASSENGER_USE;

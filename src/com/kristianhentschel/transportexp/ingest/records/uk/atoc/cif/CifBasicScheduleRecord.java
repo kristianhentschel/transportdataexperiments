@@ -227,7 +227,7 @@ public class CifBasicScheduleRecord extends AbstractCifRecord {
         this.serviceBranding = serviceBranding.trim();
     }
 
-    public void setSleepers(String sleepers) {
+    private void setSleepers(String sleepers) {
         this.sleepers = parseSleepers(sleepers);
     }
 }

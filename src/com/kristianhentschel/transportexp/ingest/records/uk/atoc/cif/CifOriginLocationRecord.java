@@ -39,7 +39,7 @@ public class CifOriginLocationRecord extends AbstractCifRecord {
         return locationTiploc;
     }
 
-    public void setLocationTiploc(String locationTiploc) {
+    private void setLocationTiploc(String locationTiploc) {
         this.locationTiploc = locationTiploc.trim();
     }
 
@@ -47,7 +47,7 @@ public class CifOriginLocationRecord extends AbstractCifRecord {
         return locationSuffix;
     }
 
-    public void setLocationSuffix(String locationSuffix) {
+    private void setLocationSuffix(String locationSuffix) {
         this.locationSuffix = locationSuffix.trim();
     }
 
@@ -55,7 +55,7 @@ public class CifOriginLocationRecord extends AbstractCifRecord {
         return scheduledDeparture;
     }
 
-    public void setScheduledDeparture(String scheduledDeparture) {
+    private void setScheduledDeparture(String scheduledDeparture) {
         this.scheduledDeparture = scheduledDeparture.trim();
     }
 
@@ -63,7 +63,7 @@ public class CifOriginLocationRecord extends AbstractCifRecord {
         return publicDeparture;
     }
 
-    public void setPublicDeparture(String publicDeparture) {
+    private void setPublicDeparture(String publicDeparture) {
         this.publicDeparture = publicDeparture.trim();
     }
 
@@ -75,7 +75,7 @@ public class CifOriginLocationRecord extends AbstractCifRecord {
         return platform;
     }
 
-    public void setPlatform(String platform) {
+    private void setPlatform(String platform) {
         this.platform = platform.trim();
     }
 
@@ -83,7 +83,7 @@ public class CifOriginLocationRecord extends AbstractCifRecord {
         return line;
     }
 
-    public void setLine(String line) {
+    private void setLine(String line) {
         this.line = line.trim();
     }
 
@@ -91,7 +91,7 @@ public class CifOriginLocationRecord extends AbstractCifRecord {
         return engineeringAllowance;
     }
 
-    public void setEngineeringAllowance(String engineeringAllowance) {
+    private void setEngineeringAllowance(String engineeringAllowance) {
         this.engineeringAllowance = engineeringAllowance.trim();
     }
 
@@ -99,7 +99,7 @@ public class CifOriginLocationRecord extends AbstractCifRecord {
         return pathingAllowance;
     }
 
-    public void setPathingAllowance(String pathingAllowance) {
+    private void setPathingAllowance(String pathingAllowance) {
         this.pathingAllowance = pathingAllowance.trim();
     }
 
@@ -107,7 +107,7 @@ public class CifOriginLocationRecord extends AbstractCifRecord {
         return activity;
     }
 
-    public void setActivity(String activity) {
+    private void setActivity(String activity) {
         // TODO this is actually a 6 x 2 field, listing multiple activities.
         this.activity = activity.trim();
     }
@@ -132,7 +132,7 @@ public class CifOriginLocationRecord extends AbstractCifRecord {
         return line.length() > 0;
     }
 
-    public void setPerformanceAllowance(String performanceAllowance) {
+    private void setPerformanceAllowance(String performanceAllowance) {
         this.performanceAllowance = performanceAllowance.trim();
     }
 }

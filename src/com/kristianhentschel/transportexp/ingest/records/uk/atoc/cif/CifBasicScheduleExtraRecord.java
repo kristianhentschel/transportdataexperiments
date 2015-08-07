@@ -34,7 +34,7 @@ public class CifBasicScheduleExtraRecord extends AbstractCifRecord {
         return uicCode;
     }
 
-    public void setUicCode(String uicCode) {
+    private void setUicCode(String uicCode) {
         this.uicCode = uicCode.trim();
     }
 
@@ -42,7 +42,7 @@ public class CifBasicScheduleExtraRecord extends AbstractCifRecord {
         return atocCode;
     }
 
-    public void setAtocCode(String atocCode) {
+    private void setAtocCode(String atocCode) {
         this.atocCode = atocCode.trim();
     }
 
@@ -50,7 +50,7 @@ public class CifBasicScheduleExtraRecord extends AbstractCifRecord {
         return ats;
     }
 
-    public void setAts(String atsCode) {
+    private void setAts(String atsCode) {
         switch(atsCode) {
             case "Y":
                 this.ats = true;
@@ -67,7 +67,7 @@ public class CifBasicScheduleExtraRecord extends AbstractCifRecord {
         return rsidToc;
     }
 
-    public void setRsidToc(String rsidToc) {
+    private void setRsidToc(String rsidToc) {
         this.rsidToc = rsidToc.trim();
     }
 
@@ -75,7 +75,7 @@ public class CifBasicScheduleExtraRecord extends AbstractCifRecord {
         return rsidTrainNumber;
     }
 
-    public void setRsidTrainNumber(String rsidTrainNumber) {
+    private void setRsidTrainNumber(String rsidTrainNumber) {
         this.rsidTrainNumber = rsidTrainNumber.trim();
     }
 
@@ -83,7 +83,7 @@ public class CifBasicScheduleExtraRecord extends AbstractCifRecord {
         return rsidPortionNumber;
     }
 
-    public void setRsidPortionNumber(String rsidPortionNumber) {
+    private void setRsidPortionNumber(String rsidPortionNumber) {
         this.rsidPortionNumber = rsidPortionNumber.trim();
     }
 
