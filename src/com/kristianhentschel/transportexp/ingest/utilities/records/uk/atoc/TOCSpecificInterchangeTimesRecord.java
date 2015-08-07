@@ -6,6 +6,14 @@ import com.kristianhentschel.transportexp.ingest.utilities.records.CommaSeparate
  * Created by Kristian on 05/08/2015.
  */
 public class TOCSpecificInterchangeTimesRecord extends CommaSeparatedValuesRecord {
+
+    private String station_code;
+    private String arriving_train_toc;
+    private String departing_train_toc;
+    private String comments;
+    private int minimum_interchange_time;
+
+
     public TOCSpecificInterchangeTimesRecord(String record_text) {
         super(record_text);
 
@@ -15,16 +23,61 @@ public class TOCSpecificInterchangeTimesRecord extends CommaSeparatedValuesRecor
             throw new IndexOutOfBoundsException();
         }
 
-        setField("station_code", getRawValue(0));
-        setField("arriving_train_toc", getRawValue(1));
-        setField("departing_train_toc", getRawValue(2));
-        setField("minimum_interchange_time", getRawValue(3));
+        setStationCode(getRawValue(0));
+        setArrivingTrainToc(getRawValue(1));
+        setDepartingTrainToc(getRawValue(2));
+        setMinimumInterchangeTime(getRawValue(3));
 
-        // Comments are optional
-        if (getRawValuesLength() > 4) {
-            setField("comments", getRawValue(4));
+        if(getRawValuesLength() > 4) {
+            setComments(getRawValue(4));
         } else {
-            setField("comments", "");
+            setComments("");
         }
+
     }
+
+    private void setComments(String comments) {
+        this.comments = comments.trim();
+    }
+
+    public String getComments() {
+        return this.comments;
+    }
+
+    public boolean hasComments() {
+        return this.comments.length() > 0;
+    }
+
+    private void setStationCode(String station_code) {
+        this.station_code = station_code;
+    }
+
+    public String getStationCode() {
+        return this.station_code;
+    }
+
+    private void setArrivingTrainToc(String arriving_train_toc) {
+        this.arriving_train_toc = arriving_train_toc;
+    }
+
+    public String getArrivingTrainToc() {
+        return this.arriving_train_toc;
+    }
+
+    private void setDepartingTrainToc(String departing_train_toc) {
+        this.departing_train_toc = departing_train_toc;
+    }
+
+    public String getDepartingTrainToc() {
+        return this.departing_train_toc;
+    }
+
+    private void setMinimumInterchangeTime(String minimum_interchange_time_str) {
+        this.minimum_interchange_time = Integer.parseInt(minimum_interchange_time_str.trim());
+    }
+
+    public int getMinimumInterchangeTime() {
+        return this.minimum_interchange_time;
+    }
+
 }

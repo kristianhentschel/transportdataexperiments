@@ -14,11 +14,12 @@ public class TOCSpecificInterchangeTimesRecordTest {
         String input = "LUT,TL,TL,4,(Luton)";
         TOCSpecificInterchangeTimesRecord dut = new TOCSpecificInterchangeTimesRecord(input);
 
-        assertEquals("LUT", dut.getField("station_code"));
-        assertEquals("TL", dut.getField("arriving_train_toc"));
-        assertEquals("TL", dut.getField("departing_train_toc"));
-        assertEquals("4", dut.getField("minimum_interchange_time"));
-        assertEquals("(Luton)", dut.getField("comments"));
+        assertEquals("LUT", dut.getStationCode());
+        assertEquals("TL", dut.getArrivingTrainToc());
+        assertEquals("TL", dut.getDepartingTrainToc());
+        assertEquals(4, dut.getMinimumInterchangeTime());
+        assertEquals("(Luton)", dut.getComments());
+        assertEquals(true, dut.hasComments());
     }
 
     @Test
@@ -26,11 +27,12 @@ public class TOCSpecificInterchangeTimesRecordTest {
         String input = "WIM,SN,TL,5,";
         TOCSpecificInterchangeTimesRecord dut = new TOCSpecificInterchangeTimesRecord(input);
 
-        assertEquals("WIM", dut.getField("station_code"));
-        assertEquals("SN", dut.getField("arriving_train_toc"));
-        assertEquals("TL", dut.getField("departing_train_toc"));
-        assertEquals("5", dut.getField("minimum_interchange_time"));
-        assertEquals("", dut.getField("comments"));
+        assertEquals("WIM", dut.getStationCode());
+        assertEquals("SN", dut.getArrivingTrainToc());
+        assertEquals("TL", dut.getDepartingTrainToc());
+        assertEquals(5, dut.getMinimumInterchangeTime());
+        assertEquals("", dut.getComments());
+        assertEquals(false, dut.hasComments());
     }
 
     @Test
@@ -38,10 +40,11 @@ public class TOCSpecificInterchangeTimesRecordTest {
         String input = "WIM,SN,TL,5,\r\n";
         TOCSpecificInterchangeTimesRecord dut = new TOCSpecificInterchangeTimesRecord(input);
 
-        assertEquals("WIM", dut.getField("station_code"));
-        assertEquals("SN", dut.getField("arriving_train_toc"));
-        assertEquals("TL", dut.getField("departing_train_toc"));
-        assertEquals("5", dut.getField("minimum_interchange_time"));
-        assertEquals("", dut.getField("comments"));
+        assertEquals("WIM", dut.getStationCode());
+        assertEquals("SN", dut.getArrivingTrainToc());
+        assertEquals("TL", dut.getDepartingTrainToc());
+        assertEquals(5, dut.getMinimumInterchangeTime());
+        assertEquals("", dut.getComments());
+        assertEquals(false, dut.hasComments());
     }
 }
