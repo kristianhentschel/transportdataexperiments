@@ -87,7 +87,7 @@ public abstract class AbstractCifRecord extends FixedWidthRecord{
         // Trainload Freight
         A0, E0, B0, B1, B4, B5, B6, B7,
         // Railfright Distribution (channel tunnel)
-        H0, H1, H3, H4, H5, H6;
+        H0, H1, H3, H4, H5, H6
     }
 
     protected CATEGORY parseCategory(String category) {
