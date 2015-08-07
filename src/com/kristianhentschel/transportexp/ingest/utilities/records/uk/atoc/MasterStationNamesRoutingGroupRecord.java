@@ -10,31 +10,65 @@ import com.kristianhentschel.transportexp.ingest.utilities.records.FixedWidthRec
  *
  */
 public class MasterStationNamesRoutingGroupRecord extends FixedWidthRecord{
+    private String[] stations;
+    private int num_stations;
+    private String group_name;
+
     public MasterStationNamesRoutingGroupRecord(String record_text) {
         super(record_text);
 
-        setField("record_type", takeChars(1));
+        this.stations = new String[10];
+
+        skipChars(1);
         skipChars(4);
-        setField("group_name", takeChars(30));
+        setGroupName(takeChars(30));
         skipChars(1);
-        setField("station_1", takeChars(3));
+        addStation(takeChars(3));
         skipChars(1);
-        setField("station_2", takeChars(3));
+        addStation(takeChars(3));
         skipChars(1);
-        setField("station_3", takeChars(3));
+        addStation(takeChars(3));
         skipChars(1);
-        setField("station_4", takeChars(3));
+        addStation(takeChars(3));
         skipChars(1);
-        setField("station_5", takeChars(3));
+        addStation(takeChars(3));
         skipChars(1);
-        setField("station_6", takeChars(3));
+        addStation(takeChars(3));
         skipChars(1);
-        setField("station_7", takeChars(3));
+        addStation(takeChars(3));
         skipChars(1);
-        setField("station_8", takeChars(3));
+        addStation(takeChars(3));
         skipChars(1);
-        setField("station_9", takeChars(3));
+        addStation(takeChars(3));
         skipChars(1);
-        setField("station_10", takeChars(3));
+        addStation(takeChars(3));
+    }
+
+    private void setGroupName(String group_name) {
+        this.group_name = group_name.trim();
+    }
+
+    public String getGroupName() {
+        return this.group_name;
+    }
+
+    private void addStation(String code) {
+        code = code.trim();
+        if (code.length() > 0) {
+            this.stations[this.num_stations++] = code;
+        }
+    }
+
+    public int getNumStations() {
+        return this.num_stations;
+    }
+
+    public String getStation(int n) {
+        if (n < num_stations) {
+            return this.stations[n];
+        } else {
+            // TODO throw array index out of bounds exception?
+            throw new ArrayIndexOutOfBoundsException("Routing group does not have this many stations.");
+        }
     }
 }

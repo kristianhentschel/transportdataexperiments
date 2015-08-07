@@ -9,23 +9,17 @@ import static org.junit.Assert.*;
  */
 public class MasterStationNamesRoutingGroupRecordTest {
     @Test
-    public void testRoutingGroup (){
+    public void testRoutingGroup(){
         String input = "V    WALTHAMSTOW CENTRAL            WHC WMW BHO                                   ";
         MasterStationNamesRoutingGroupRecord dut = new MasterStationNamesRoutingGroupRecord(input);
 
-        assertEquals("V", dut.getField("record_type"));
-        assertEquals("WALTHAMSTOW CENTRAL", dut.getField("group_name").trim());
-        assertEquals("WHC", dut.getField("station_1"));
-        assertEquals("WMW", dut.getField("station_2"));
-        assertEquals("BHO", dut.getField("station_3"));
-        assertEquals("   ", dut.getField("station_4"));
-        assertEquals("   ", dut.getField("station_5"));
-        assertEquals("   ", dut.getField("station_6"));
-        assertEquals("   ", dut.getField("station_7"));
-        assertEquals("   ", dut.getField("station_8"));
-        assertEquals("   ", dut.getField("station_9"));
-        assertEquals("   ", dut.getField("station_10"));
+        assertEquals("WALTHAMSTOW CENTRAL", dut.getGroupName());
+        assertEquals("WHC", dut.getStation(0));
+        assertEquals("WMW", dut.getStation(1));
+        assertEquals("BHO", dut.getStation(2));
+        assertEquals(3, dut.getNumStations());
 
+        // TODO: Test expected exception on higher station numbers.
     }
 
 }

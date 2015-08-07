@@ -14,31 +14,31 @@ public class MasterStationNamesStationRecordTest {
         String input = "A    HYNDLAND                      1HYNDLNDHYN   HYN12553 66676 3             530 ";
         MasterStationNamesStationRecord dut = new MasterStationNamesStationRecord(input);
 
-        assertEquals("A", dut.getField("record_type"));
-        assertEquals("HYNDLAND", dut.getField("station_name").trim());
-        assertEquals("1", dut.getField("cate_type"));
-        assertEquals("HYNDLND", dut.getField("tiploc"));
-        assertEquals("HYN", dut.getField("subsidiary_3_alpha"));
-        assertEquals("HYN", dut.getField("3_alpha"));
-        assertEquals("12553", dut.getField("easting"));
-        assertEquals(" ", dut.getField("estimated"));
-        assertEquals("66676", dut.getField("northing"));
-        assertEquals("3", dut.getField("change_time").trim());
+        assertEquals("HYNDLAND", dut.getStationName());
+        assertEquals(MasterStationNamesStationRecord.CATE.SMALL_INTERCHANGE, dut.getInterchangeStatus());
+        assertEquals("HYNDLND", dut.getTiploc());
+        assertEquals("HYN", dut.getSubsidiaryCode());
+        assertEquals("HYN", dut.getCode());
+        assertEquals(12553, dut.getEasting());
+        assertEquals(false, dut.isEstimated());
+        assertEquals(66676, dut.getNorthing());
+        assertEquals(3, dut.getChangeTime());
+        assertEquals(false, dut.isSubsidiary());
     }
 
     public void testStationRecordLongFields() throws Exception {
         String input = "A___012345678901234567890134567890TIPLOC0S3A___3AL00000E0000015";
         MasterStationNamesStationRecord dut = new MasterStationNamesStationRecord(input);
 
-        assertEquals("A", dut.getField("record_type"));
-        assertEquals("012345678901234567890123456789", dut.getField("station_name").trim());
-        assertEquals("0", dut.getField("cate_type"));
-        assertEquals("TIPLOC0", dut.getField("tiploc"));
-        assertEquals("S3A", dut.getField("subsidiary_3_alpha"));
-        assertEquals("3AL", dut.getField("3_alpha"));
-        assertEquals("00000", dut.getField("easting"));
-        assertEquals("E", dut.getField("estimated"));
-        assertEquals("00000", dut.getField("northing"));
-        assertEquals("15", dut.getField("change_time").trim());
+        assertEquals("012345678901234567890123456789", dut.getStationName());
+        assertEquals(MasterStationNamesStationRecord.CATE.NO_INTERCHANGE, dut.getInterchangeStatus());
+        assertEquals("TIPLOC0", dut.getTiploc());
+        assertEquals("S3A", dut.getSubsidiaryCode());
+        assertEquals("3AL", dut.getCode());
+        assertEquals(0, dut.getEasting());
+        assertEquals(true, dut.isEstimated());
+        assertEquals(0, dut.getNorthing());
+        assertEquals(15, dut.getChangeTime());
+        assertEquals(true, dut.isSubsidiary());
     }
 }
