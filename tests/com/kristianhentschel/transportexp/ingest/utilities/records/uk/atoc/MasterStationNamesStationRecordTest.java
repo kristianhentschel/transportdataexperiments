@@ -26,8 +26,9 @@ public class MasterStationNamesStationRecordTest {
         assertEquals(false, dut.isSubsidiary());
     }
 
+    @Test
     public void testStationRecordLongFields() throws Exception {
-        String input = "A___012345678901234567890134567890TIPLOC0S3A___3AL00000E0000015";
+        String input = "A____0123456789012345678901234567890TIPLOC0S3A___3AL00000E0000015";
         MasterStationNamesStationRecord dut = new MasterStationNamesStationRecord(input);
 
         assertEquals("012345678901234567890123456789", dut.getStationName());
