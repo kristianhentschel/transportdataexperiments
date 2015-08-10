@@ -6,6 +6,7 @@ import com.kristianhentschel.transportexp.ingest.records.formats.FixedWidthRecor
  * Created by Kristian on 07/08/2015.
  */
 public abstract class AbstractCifRecord extends FixedWidthRecord{
+
     public enum TRANSACTION_TYPE {NEW, DELETE, REVISE}
 
     protected TRANSACTION_TYPE parseTransactionType(String transaction_type) {
