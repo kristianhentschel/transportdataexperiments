@@ -11,6 +11,31 @@ public class TimetableDaysOfWeek {
 
     public TimetableDaysOfWeek() {
         days = new BitSet(7);
+        days.clear();
+    }
+
+    /**
+     * Sets the running flag for the given day
+     * @param d index for the day of the week, from 0 - Monday to 6 - Sunday.
+     * @param running boolean flag, true if the service runs this day.
+     */
+    public void setDay(int d, boolean running) {
+        days.set(d, running);
+    }
+
+    public boolean getDay(int d) {
+        return days.get(d);
+    }
+
+    /**
+     * Parses a formatted bit string to set the day flags.
+     * @param s the string, made up of 7 '1' and '0' characters, the first representing the state for Monday;
+     *          e.g. "1111100" for a service that only runs on week-days.
+     */
+    public void parseString(String s) {
+        for(int i = 0; i < 7; i++) {
+            days.set(i, (s.charAt(i) == '1'));
+        }
     }
 
     public boolean runsMondays() {
