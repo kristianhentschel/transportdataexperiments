@@ -2,6 +2,9 @@ package com.kristianhentschel.transportexp.timetable.utilities;
 
 /**
  * Created by Kristian on 13/08/2015.
+ *
+ * A duration at seconds granularity, to be used for fixed link times and any such durations advertised in minutes,
+ * hours, or seconds rather than as a timetable or service frequency.
  */
 public class TimetableDuration {
     private long time; // the total duration in seconds.

@@ -7,6 +7,7 @@ import com.kristianhentschel.transportexp.timetable.utilities.TimetableTimeOfDay
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by Kristian on 13/08/2015.
@@ -24,8 +25,17 @@ public class TimetableStop extends TimetableRecord {
     private List<TimetableService> stoppingServices;
     private List<TimetableFixedLink> fixedLinks;
 
+    private Calendar calendar;
+
+    private Calendar getCalendar(){
+        if (calendar != null)
+            return calendar;
+        else
+            return calendar = Calendar.getInstance(TimeZone.getTimeZone(location.getTimeZoneID()));
+    }
+
     public long getUTCTime(TimetableDate date, TimetableTimeOfDay time) {
-        Calendar c = Calendar.getInstance(location.getTimeZone());
+        Calendar c = getCalendar();
         c.set(date.getYear(), date.getMonth(), date.getDay(), time.getHour(), time.getMinute(), time.getSecond());
         return c.getTime().getTime();
     }

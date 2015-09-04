@@ -12,7 +12,47 @@ public class TimetableLocation {
     private String streetAddress;
     private TimeZone timeZone;
 
-    public TimeZone getTimeZone() {
-        return (TimeZone)timeZone.clone();
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
+
+    public boolean isEstimated() {
+        return estimated;
+    }
+
+    public void setEstimated(boolean estimated) {
+        this.estimated = estimated;
+    }
+
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
+    }
+
+    private TimeZone getTimeZone() {
+        return timeZone;
+    }
+
+    public String getTimeZoneID() {
+        return timeZone.getID();
+    }
+
+    public void setTimeZone(TimeZone timeZone) {
+        this.timeZone = timeZone;
     }
 }

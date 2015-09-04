@@ -40,5 +40,4 @@ public class TimetableDaysOfWeek {
     public boolean runsSundays() {
         return days.get(6);
     }
-
 }
