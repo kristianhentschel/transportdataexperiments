@@ -7,30 +7,38 @@ package com.kristianhentschel.transportexp.timetable.utilities;
  * hours, or seconds rather than as a timetable or service frequency.
  */
 public class TimetableDuration {
-    private long time; // the total duration in seconds.
+    private long milliseconds; // the total duration in seconds.
 
     public TimetableDuration() {
-        time = 0;
+        milliseconds = 0;
     }
 
+    public TimetableDuration(long time) {
+        this.milliseconds = time;
+    }
 
     public void addHours(long hours) {
-        time = time + hours * 60 * 60;
+        milliseconds = milliseconds + hours * 60 * 60 * 1000;
     }
 
     public void addMinutes(long minutes) {
-        time = time + minutes * 60;
+        milliseconds = milliseconds + minutes * 60 * 1000;
     }
 
     public void addSeconds(long seconds) {
-        time = time + seconds;
+        milliseconds = milliseconds + seconds * 1000;
     }
 
-    public long getTime() {
-        return time;
+    public long getMilliseconds() {
+        return milliseconds;
     }
 
+    /**
+     *
+     * @param startTimeUTC
+     * @return UTC milliseconds in _milliseconds_ after the duration has passed
+     */
     public long getUTCTimeAfter(long startTimeUTC) {
-        return startTimeUTC + time;
+        return startTimeUTC + milliseconds;
     }
 }
