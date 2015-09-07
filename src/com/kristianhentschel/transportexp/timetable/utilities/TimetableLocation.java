@@ -4,6 +4,9 @@ import java.util.TimeZone;
 
 /**
  * Created by Kristian on 13/08/2015.
+ *
+ * A timetable location is a geographic location with an optional street address (free format string for now).
+ * As a geographic reference point it also has a time zone associated with it.
  */
 public class TimetableLocation {
     private double lat;
@@ -11,6 +14,14 @@ public class TimetableLocation {
     private boolean estimated;
     private String streetAddress;
     private TimeZone timeZone;
+
+    public TimetableLocation(TimeZone timeZone) {
+        lat = 0.0;
+        lon = 0.0;
+        estimated = true;
+        streetAddress = "";
+        this.timeZone = timeZone;
+    }
 
     public double getLat() {
         return lat;
@@ -42,10 +53,6 @@ public class TimetableLocation {
 
     public void setStreetAddress(String streetAddress) {
         this.streetAddress = streetAddress;
-    }
-
-    private TimeZone getTimeZone() {
-        return timeZone;
     }
 
     public String getTimeZoneID() {
