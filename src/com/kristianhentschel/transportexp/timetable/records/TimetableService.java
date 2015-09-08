@@ -19,7 +19,7 @@ public class TimetableService extends TimetableRecord {
     private TimetableDate endDate;
 
     // stops with arrival and/or departure times
-    private List <Object> schedule;
+    private List <TimetableServiceStop> schedule;
 
     private TimetableDaysOfWeek daysOfWeek;
 }
