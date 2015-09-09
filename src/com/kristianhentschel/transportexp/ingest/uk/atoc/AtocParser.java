@@ -1,4 +1,4 @@
-package com.kristianhentschel.transportexp.ingest;
+package com.kristianhentschel.transportexp.ingest.uk.atoc;
 
 import com.kristianhentschel.transportexp.ingest.uk.atoc.alf.AdditionalFixedLinksRecord;
 import com.kristianhentschel.transportexp.ingest.uk.atoc.cif.*;
@@ -21,24 +21,48 @@ import java.util.*;
 /**
  * Created by Kristian on 09/09/2015.
  *
- * A playground for developing parser methods for the ATOC files.
+ * A prototype for a more generic parser - this specific implementation parses a folder of ATOC/RSP files.
  */
 public class AtocParser {
-    private static TimetableSystem ts;
-    private static Map<String, String> tiplocToCode;
-    private static Map<String, String> subsidiaryToPrimary;
+    private TimetableSystem ts;
+    private Map<String, String> tiplocToCode;
+    private Map<String, String> subsidiaryToPrimary;
+    private String parse_dir;
+    private boolean parsed;
 
-    public static void main(String argv[]) {
-        if(argv.length < 1) {
-            System.err.println("Need first parameter atoc-base-dir");
-            System.exit(1);
+    /**
+     * Construct a new parser for a set of ATOC files.
+     *
+     * @param parse_dir path to the base directory, which must be unzipped but named according to ATOC convention,
+     *                  that is, it should be of the form ttifXXX where XXX is a 3-digit sequence number also used
+     *                  in the contained files.
+     */
+    public AtocParser(String parse_dir) {
+        this.parse_dir = parse_dir;
+
+        ts = new TimetableSystem("ATOC", TimetableRecord.DATA_SOURCE.UK_ATOC);
+        subsidiaryToPrimary = new HashMap<String, String>();
+        tiplocToCode = new HashMap<String, String>();
+
+        this.parsed = false;
+    }
+
+    /**
+     * Parses the relevant files contained in the parse_dir, once, and populates the timetable system.
+     * After the first parse, if this method is called again, the same object will be returned, and the parse
+     * will not be repeated. Note that the timetable system may contain mutable objects that could be modified outside
+     * of this class.
+     *
+     * @return A timetable system based on this set of files.
+     */
+    public TimetableSystem getTimetableSystem() {
+        // if we've already done the expensive parsing, just return the timetable system we created.
+        if (parsed) {
+            return ts;
         }
 
-        // Determine paths
-        String parsedir = argv[0];
-        System.out.println(parsedir);
-
-        File base_dir = new File(parsedir);
+        // Otherwise, prepare the file paths and start parsing away!
+        File base_dir = new File(parse_dir);
         String base_name = base_dir.getName();
         String data_seq = base_name.substring(base_name.length()-3, base_name.length());
         File file_msn = new File(base_dir, "ttisf"+data_seq+".msn");
@@ -46,57 +70,18 @@ public class AtocParser {
         File file_alf = new File(base_dir, "ttisf"+data_seq+".alf");
         File file_mca = new File(base_dir, "ttisf"+data_seq+".mca");
 
-        // initialise the system and alias maps
-        ts = new TimetableSystem("ATOC", TimetableRecord.DATA_SOURCE.UK_ATOC);
-        subsidiaryToPrimary = new HashMap<String, String>();
-        tiplocToCode = new HashMap<String, String>();
-
         Runtime R = Runtime.getRuntime();
 
         // parse individual files in the correct order
-        System.out.println("Before loading any files: Heap Size: "+(R.totalMemory() - R.freeMemory()));
-
         parseMasterStationNames(file_msn);
         parseFixedLinks(file_flf);
         parseAdditionalFixedLinks(file_alf);
-
-        System.out.println("Before loading timetable: Heap Size: "+(R.totalMemory() - R.freeMemory()));
         parseTimetableFile(file_mca);
 
-        System.out.println("After loading timetable: Heap Size: "+(R.totalMemory() - R.freeMemory()));
-        System.gc();
-        System.out.println("After forced GC: Heap Size: "+(R.totalMemory() - R.freeMemory()));
-
-        // To see if it works, print stations from timetable system
-
-        Iterator<TimetableStop> it = ts.getStopsIterator();
-        while(it.hasNext()) {
-            TimetableStop stop = it.next();
-            System.out.print(stop.getName());
-            System.out.print(" (" + stop.getNumStoppingServices() + " services) ");
-
-//            Iterator<TimetableFixedLink> fl_it = stop.getFixedLinkIterator();
-//            if(fl_it.hasNext())
-//                System.out.print("\t\tFixed links: ");
-//            while(fl_it.hasNext()) {
-//                TimetableFixedLink fl = fl_it.next();
-//                System.out.print(fl.getMode());
-//                System.out.print(" to ");
-//                if(fl.getOrigin()
-//                        .getLocalStopId()
-//                        .equals(stop.getLocalStopId())) {
-//                    System.out.print(fl.getDestination().getName());
-//                } else {
-//                    System.out.print(fl.getOrigin().getName());
-//                }
-//                System.out.print(" ");
-//            }
-
-            System.out.println();
-        }
+        return ts;
     }
 
-    private static void parseTimetableFile(File file_mca) {
+    private void parseTimetableFile(File file_mca) {
         Scanner sc;
 
         try {
@@ -130,9 +115,6 @@ public class AtocParser {
                             break;
 
                         // TODO: deal with UPDATE transactions if present?
-
-                        // This is the first record for a new train. The service object has already been created,
-                        // so we can just fill in the basic info here.
 
                         // TODO: set start and end dates once implemented in record class.
                         // s.setStartDate(bs.getDateRunsFrom());
@@ -205,7 +187,7 @@ public class AtocParser {
         }
     }
 
-    private static void parseAdditionalFixedLinks(File file_alf) {
+    private void parseAdditionalFixedLinks(File file_alf) {
         Scanner sc;
 
         try {
@@ -222,7 +204,7 @@ public class AtocParser {
         }
     }
 
-    private static void parseAdditionalFixedLinksRecord(AdditionalFixedLinksRecord r) {
+    private void parseAdditionalFixedLinksRecord(AdditionalFixedLinksRecord r) {
         TimetableStop origin = getStop(r.getOrigin());
         TimetableStop destination = getStop(r.getDestination());
         TimetableFixedLink fl = new TimetableFixedLink();
@@ -252,7 +234,7 @@ public class AtocParser {
         origin.addFixedLink(fl);
     }
 
-    private static void parseFixedLinks(File file_flf) {
+    private void parseFixedLinks(File file_flf) {
         Scanner sc;
 
         try {
@@ -272,7 +254,7 @@ public class AtocParser {
         }
     }
 
-    private static TimetableStop getStop(String stopId) {
+    private TimetableStop getStop(String stopId) {
         if (subsidiaryToPrimary.containsKey(stopId))
             return ts.getStop(subsidiaryToPrimary.get(stopId));
 
@@ -284,7 +266,7 @@ public class AtocParser {
      * stop in the timetable system of reference.
      * @param r record
      */
-    private static void parseFixedLinksRecord(FixedLinksRecord r) {
+    private void parseFixedLinksRecord(FixedLinksRecord r) {
 
         TimetableStop origin = getStop(r.getOrigin());
         TimetableStop destination = getStop(r.getDestination());
@@ -309,7 +291,7 @@ public class AtocParser {
      * Parses the Master Station Names file containing mappings between tiploc codes and station names, locations, etc.
      * @param file_msn A File object describing the msn file path.
      */
-    private static void parseMasterStationNames(File file_msn) {
+    private void parseMasterStationNames(File file_msn) {
         Scanner sc;
 
         try {
@@ -335,7 +317,7 @@ public class AtocParser {
         }
     }
 
-    private static void parseStop(MasterStationNamesStationRecord r) {
+    private void parseStop(MasterStationNamesStationRecord r) {
         // Set tiploc to three-letter-code mapping
         tiplocToCode.put(r.getTiploc(), r.getCode());
 
@@ -367,7 +349,7 @@ public class AtocParser {
         stop.setChangeTime(changeTime);
     }
 
-    private static void convertLocation(TimetableLocation location, int easting, int northing) {
+    private void convertLocation(TimetableLocation location, int easting, int northing) {
         // TODO implement UK national grid (see national rail/atoc docs) to lat/lon conversion here.
         location.setLat(northing);
         location.setLon(easting);
