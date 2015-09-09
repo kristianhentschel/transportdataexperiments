@@ -43,4 +43,12 @@ public class MasterStationNamesStationRecordTest {
         assertEquals(15, dut.getChangeTime());
         assertEquals(true, dut.isSubsidiary());
     }
+
+    @Test
+    public void testShortTiploc() throws Exception {
+        String input = "A    BISHOPBRIGGS                  0BSHB   BBG   BBG12610 66701 5             530";
+        MasterStationNamesStationRecord dut = new MasterStationNamesStationRecord(input);
+
+        assertEquals("BSHB", dut.getTiploc());
+    }
 }

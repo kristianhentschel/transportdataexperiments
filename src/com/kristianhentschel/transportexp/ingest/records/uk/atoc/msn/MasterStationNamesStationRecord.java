@@ -67,7 +67,7 @@ public class MasterStationNamesStationRecord extends FixedWidthRecord{
     }
 
     private void setTiploc(String tiploc) {
-        this.tiploc = tiploc;
+        this.tiploc = tiploc.trim();
     }
 
     public String getSubsidiaryCode() {
