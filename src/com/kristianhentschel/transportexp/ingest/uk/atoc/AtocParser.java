@@ -119,11 +119,13 @@ public class AtocParser {
                         // TODO: set start and end dates once implemented in record class.
                         // s.setStartDate(bs.getDateRunsFrom());
                         // s.setEndDate(bs.getDateRunsTo());
-                        s.setName(bs.getTrainIdentity());
+                        s.setName(bs.getTrainUid());
 
                         TimetableDaysOfWeek dow = new TimetableDaysOfWeek();
                         dow.parseString(bs.getDaysRun());
                         s.setDaysOfWeek(dow);
+
+                        ts.addService(s);
                         break;
                     case "BX":
                         CifBasicScheduleExtraRecord bx = new CifBasicScheduleExtraRecord(line);

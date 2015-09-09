@@ -32,17 +32,44 @@ public class AtocPlayground1 {
 
         while(inputScanner.hasNext()) {
             String request = inputScanner.next();
+
+            // Special Commands
             if (request.equals("q")) {
                 System.out.println("Bye.");
                 System.exit(0);
             }
 
+            if (request.equals("ps")) {
+                printServices = !printServices;
+                System.out.println("printing services " + (printServices ? "enabled" : "disabled"));
+                continue;
+            }
+
+            if (request.equals("pfl")) {
+                printFixedLinks = !printFixedLinks;
+                System.out.println("printing fixed links " + (printFixedLinks ? "enabled" : "disabled"));
+                continue;
+            }
+
+            // Information requests (station or train id)
             if (ts.hasStop(request))
                 printStopInfo(ts.getStop(request), printFixedLinks, printServices);
+            else if (ts.hasService(request))
+                printServiceInfo(ts.getService(request));
             else
-                System.out.println("No such stop, " + request);
+                System.out.println("No such command, stop, or service. " + request);
         }
 
+    }
+
+    private static void printServiceInfo(TimetableService service) {
+        Iterator<TimetableServiceStop> scheduleIterator = service.getScheduleIterator();
+
+        while (scheduleIterator.hasNext()) {
+            TimetableServiceStop s = scheduleIterator.next();
+
+            System.out.printf("ARR %s DEP %s \t %s\n", s.getArrives(), s.getDeparts(), s.getStop().getName());
+        }
     }
 
     public static void printStopInfo(TimetableStop stop, boolean printLinks, boolean printServices) {

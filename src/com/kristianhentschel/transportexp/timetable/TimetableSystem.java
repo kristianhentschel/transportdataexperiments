@@ -1,6 +1,7 @@
 package com.kristianhentschel.transportexp.timetable;
 
 import com.kristianhentschel.transportexp.timetable.records.TimetableRecord;
+import com.kristianhentschel.transportexp.timetable.records.TimetableService;
 import com.kristianhentschel.transportexp.timetable.records.TimetableStop;
 
 import java.util.HashMap;
@@ -21,9 +22,11 @@ public class TimetableSystem {
     private TimetableRecord.DATA_SOURCE dataSource;
     private String name;
     private Map<String, TimetableStop> stops;
+    private Map<String, TimetableService> services;
 
     public TimetableSystem(String name, TimetableRecord.DATA_SOURCE dataSource) {
         this.stops = new HashMap<String, TimetableStop>();
+        this.services = new HashMap<String, TimetableService>();
         this.name = name;
         this.dataSource = dataSource;
     }
@@ -54,5 +57,17 @@ public class TimetableSystem {
      */
     public Iterator<TimetableStop> getStopsIterator() {
         return stops.values().iterator();
+    }
+
+    public void addService(TimetableService s) {
+        services.put(s.getName(), s);
+    }
+
+    public boolean hasService(String serviceName) {
+        return services.containsKey(serviceName);
+    }
+
+    public TimetableService getService(String serviceName) {
+        return services.get(serviceName);
     }
 }
