@@ -3,6 +3,8 @@ package com.kristianhentschel.transportexp.timetable;
 import com.kristianhentschel.transportexp.timetable.records.TimetableRecord;
 import com.kristianhentschel.transportexp.timetable.records.TimetableStop;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -21,6 +23,7 @@ public class TimetableSystem {
     private Map<String, TimetableStop> stops;
 
     public TimetableSystem(String name, TimetableRecord.DATA_SOURCE dataSource) {
+        this.stops = new HashMap<String, TimetableStop>();
         this.name = name;
         this.dataSource = dataSource;
     }
@@ -40,5 +43,12 @@ public class TimetableSystem {
         stop.setDataSource(dataSource);
         stops.put(stopId, stop);
         return stop;
+    }
+
+    /**
+     * @return an iterator over all stops, in unspecified order
+     */
+    public Iterator<TimetableStop> getStopsIterator() {
+        return stops.values().iterator();
     }
 }
