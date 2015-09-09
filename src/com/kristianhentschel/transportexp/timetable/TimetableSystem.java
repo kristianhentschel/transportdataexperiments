@@ -35,7 +35,7 @@ public class TimetableSystem {
      */
     public TimetableStop getStop(String stopId) {
         // If there already is a stop with this (unique) id, just return it.
-        if(stops.containsKey(stopId))
+        if(hasStop(stopId))
             return stops.get(stopId);
 
         // If it does not already exist, initialise the stop first.
@@ -43,6 +43,10 @@ public class TimetableSystem {
         stop.setDataSource(dataSource);
         stops.put(stopId, stop);
         return stop;
+    }
+
+    public boolean hasStop(String stopId) {
+        return stops.containsKey(stopId);
     }
 
     /**
