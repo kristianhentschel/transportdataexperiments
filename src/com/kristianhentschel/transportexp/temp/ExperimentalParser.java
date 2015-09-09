@@ -19,6 +19,10 @@ import java.util.*;
  * A playground for developing parser methods for the ATOC files.
  */
 public class ExperimentalParser {
+    private static TimetableSystem ts;
+    private static Map<String, String> tiplocToCode;
+    private static Map<String, String> subsidiaryToPrimary;
+
     public static void main(String argv[]) {
         if(argv.length < 1) {
             System.err.println("Need first parameter atoc-base-dir");
@@ -32,27 +36,25 @@ public class ExperimentalParser {
         File base_dir = new File(parsedir);
         String base_name = base_dir.getName();
         String data_seq = base_name.substring(base_name.length()-3, base_name.length());
-        File file_tis = new File(base_dir, "ttisf"+data_seq+".tis");
         File file_msn = new File(base_dir, "ttisf"+data_seq+".msn");
-        File file_mca = new File(base_dir, "ttisf"+data_seq+".mca");
         File file_flf = new File(base_dir, "ttisf"+data_seq+".flf");
         File file_alf = new File(base_dir, "ttisf"+data_seq+".alf");
+        File file_mca = new File(base_dir, "ttisf"+data_seq+".mca");
 
-        // initialise the system
-        TimetableSystem ts = new TimetableSystem("ATOC", TimetableRecord.DATA_SOURCE.UK_ATOC);
-
-        // alternative station codes still used in these files but not relevant to timetable system
-        Map<String,String> subsidiaryToPrimary = new HashMap<String, String>();
+        // initialise the system and alias maps
+        ts = new TimetableSystem("ATOC", TimetableRecord.DATA_SOURCE.UK_ATOC);
+        subsidiaryToPrimary = new HashMap<String, String>();
+        tiplocToCode = new HashMap<String, String>();
 
         // parse master station names file
-        Map<String, String> tiplocToStationCode = parseMasterStationNames(ts, file_msn, subsidiaryToPrimary);
-
-        // TODO parse other files using this base data
+        parseMasterStationNames(file_msn);
 
         // parse fixed links file
-        parseFixedLinks(ts, subsidiaryToPrimary, file_flf);
+        parseFixedLinks(file_flf);
 
-        //parseAdditionalFixedLinks(ts, file_alf);
+        // TODO parse other files using this base data
+        // parseAdditionalFixedLinks(file_alf);
+        // parseTimetableFile(file_mca);
 
         // To see if it works, print stations from timetable system
 
@@ -82,7 +84,7 @@ public class ExperimentalParser {
         }
     }
 
-    private static void parseFixedLinks(TimetableSystem ts, Map<String, String> subsidiaryToPrimary, File file_flf) {
+    private static void parseFixedLinks(File file_flf) {
         Scanner sc;
 
         try {
@@ -94,7 +96,7 @@ public class ExperimentalParser {
                     break;
 
                 FixedLinksRecord r = new FixedLinksRecord(line);
-                parseFixedLinksRecord(ts, subsidiaryToPrimary, r);
+                parseFixedLinksRecord(r);
             }
 
         } catch(FileNotFoundException e) {
@@ -102,7 +104,7 @@ public class ExperimentalParser {
         }
     }
 
-    private static TimetableStop getStop(TimetableSystem ts, Map<String, String> subsidiaryToPrimary, String stopId) {
+    private static TimetableStop getStop(String stopId) {
         if (subsidiaryToPrimary.containsKey(stopId))
             return ts.getStop(subsidiaryToPrimary.get(stopId));
 
@@ -112,13 +114,12 @@ public class ExperimentalParser {
     /**
      * Parses a single fixed links record, adding the resulting fixed link object to both the origin and destination
      * stop in the timetable system of reference.
-     * @param ts timetable system
      * @param r record
      */
-    private static void parseFixedLinksRecord(TimetableSystem ts, Map<String, String> subsidiaryToPrimary, FixedLinksRecord r) {
+    private static void parseFixedLinksRecord(FixedLinksRecord r) {
 
-        TimetableStop origin = getStop(ts, subsidiaryToPrimary, r.getOrigin());
-        TimetableStop destination = getStop(ts, subsidiaryToPrimary, r.getDestination());
+        TimetableStop origin = getStop(r.getOrigin());
+        TimetableStop destination = getStop(r.getDestination());
         TimetableFixedLink fl = new TimetableFixedLink();
 
         fl.setOrigin(origin);
@@ -130,21 +131,17 @@ public class ExperimentalParser {
         duration.addMinutes(r.getTime());
         fl.setDuration(duration);
 
-        // TODO: bi-directional link represented by a uni-directional class added to both...???
+        // TODO: bi-directional link represented by a uni-directional class added to both... might want separate instances
+        // or make links bi-directional by default?
         origin.addFixedLink(fl);
         destination.addFixedLink(fl);
     }
 
     /**
      * Parses the Master Station Names file containing mappings between tiploc codes and station names, locations, etc.
-     * @param ts the timetable system of reference, wherein the stops are created.
      * @param file_msn A File object describing the msn file path.
-     * @param subsidiaryToPrimary
-     * @return A map from tiploc codes to three letter station codes. Useful to determine if a tiploc is a real station.
      */
-    private static Map<String, String> parseMasterStationNames(TimetableSystem ts, File file_msn, Map<String, String> subsidiaryToPrimary) {
-        Map<String, String> tiplocToCode = new HashMap<String, String>();
-
+    private static void parseMasterStationNames(File file_msn) {
         Scanner sc;
 
         try {
@@ -163,16 +160,14 @@ public class ExperimentalParser {
                 }
 
                 MasterStationNamesStationRecord r = new MasterStationNamesStationRecord(line);
-                parseStop(ts, tiplocToCode, subsidiaryToPrimary, r);
+                parseStop(r);
             }
         } catch(FileNotFoundException e) {
             System.out.println("Error opening MSN file: " + e.getMessage());
         }
-
-        return tiplocToCode;
     }
 
-    private static void parseStop(TimetableSystem ts, Map<String, String> tiplocToCode, Map<String, String> subsidiaryToPrimary, MasterStationNamesStationRecord r) {
+    private static void parseStop(MasterStationNamesStationRecord r) {
         // Set tiploc to three-letter-code mapping
         tiplocToCode.put(r.getTiploc(), r.getCode());
 
