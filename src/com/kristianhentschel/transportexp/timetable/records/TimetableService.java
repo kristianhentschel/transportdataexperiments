@@ -5,6 +5,7 @@ import com.kristianhentschel.transportexp.timetable.utilities.TimetableDaysOfWee
 import com.kristianhentschel.transportexp.timetable.utilities.TimetableTimeOfDay;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -26,6 +27,23 @@ public class TimetableService extends TimetableRecord {
 
     public TimetableService() {
         schedule = new ArrayList<TimetableServiceStop>();
+    }
+
+    public Iterator<TimetableServiceStop> getScheduleIterator() {
+        return schedule.iterator();
+    }
+
+    /**
+     * Adds a stop to the end of the service's schedule.
+     * @param stop the stop
+     * @param arrives arrival time, may be null for originating locations
+     * @param departs departure time, may be null for terminating locations
+     */
+    public void addStop(TimetableStop stop, TimetableTimeOfDay arrives, TimetableTimeOfDay departs) {
+        TimetableServiceStop serviceStop = new TimetableServiceStop(this, stop);
+        serviceStop.setArrives(arrives);
+        serviceStop.setDeparts(departs);
+        schedule.add(serviceStop);
     }
 
     public String getOperator() {
