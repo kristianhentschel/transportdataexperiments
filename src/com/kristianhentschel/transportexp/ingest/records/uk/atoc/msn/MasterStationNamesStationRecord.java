@@ -139,6 +139,6 @@ public class MasterStationNamesStationRecord extends FixedWidthRecord{
     }
 
     public boolean isSubsidiary() {
-        return !this.subsidiary_code.equals(this.code);
+        return this.interchange_status == CATE.SUBSIDIARY_TIPLOC;
     }
 }
