@@ -3,6 +3,7 @@ package com.kristianhentschel.transportexp.timetable.records;
 import com.kristianhentschel.transportexp.timetable.utilities.TimetableDate;
 import com.kristianhentschel.transportexp.timetable.utilities.TimetableDaysOfWeek;
 import com.kristianhentschel.transportexp.timetable.utilities.TimetableDuration;
+import com.kristianhentschel.transportexp.timetable.utilities.TimetableTimeOfDay;
 
 /**
  * Created by Kristian on 13/08/2015.
@@ -24,6 +25,8 @@ public class TimetableFixedLink extends TimetableRecord {
     private TimetableDaysOfWeek daysOfWeek;
     private TimetableDate startDate;
     private TimetableDate endDate;
+    private TimetableTimeOfDay startTime;
+    private TimetableTimeOfDay endTime;
 
     public String getMode() {
         return mode;
@@ -103,5 +106,21 @@ public class TimetableFixedLink extends TimetableRecord {
 
     public void setEndDate(TimetableDate endDate) {
         this.endDate = endDate;
+    }
+
+    public void setStartTime(TimetableTimeOfDay startTime) {
+        this.startTime = startTime;
+    }
+
+    public TimetableTimeOfDay getStartTime() {
+        return startTime;
+    }
+
+    public void setEndTime(TimetableTimeOfDay endTime) {
+        this.endTime = endTime;
+    }
+
+    public TimetableTimeOfDay getEndTime() {
+        return endTime;
     }
 }

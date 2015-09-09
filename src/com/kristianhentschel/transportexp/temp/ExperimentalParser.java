@@ -244,9 +244,8 @@ public class ExperimentalParser {
         // if(r.hasEndDate()) { }
         // if(r.hasStartDate()) { }
 
-        // TODO: Set start/end times of day (implement in TimetableFixedLink class)
-        // fl.setStartTime(new TimetableTimeOfDay(Integer.parseInt(r.getStartTime().substring(0,2))));
-        // fl.setEndTime(new TimetableTimeOfDay(Integer.parseInt(r.getEndTime().substring(2,4))));
+        fl.setStartTime(TimetableTimeOfDay.fromStringHHMM(r.getStartTime()));
+        fl.setEndTime(TimetableTimeOfDay.fromStringHHMM(r.getEndTime()));
 
         // The additional fixed links appear to be uni-directional (duplicates exist in source file.)
         origin.addFixedLink(fl);
