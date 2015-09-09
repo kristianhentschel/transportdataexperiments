@@ -24,4 +24,84 @@ public class TimetableFixedLink extends TimetableRecord {
     private TimetableDaysOfWeek daysOfWeek;
     private TimetableDate startDate;
     private TimetableDate endDate;
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public TimetableDuration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(TimetableDuration duration) {
+        this.duration = duration;
+    }
+
+    public TimetableStop getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(TimetableStop origin) {
+        this.origin = origin;
+    }
+
+    public TimetableStop getDestination() {
+        return destination;
+    }
+
+    public void setDestination(TimetableStop destination) {
+        this.destination = destination;
+    }
+
+    public TimetableDuration getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(TimetableDuration frequency) {
+        this.frequency = frequency;
+    }
+
+    public TimetableDaysOfWeek getDaysOfWeek() {
+        return daysOfWeek;
+    }
+
+    public void setDaysOfWeek(TimetableDaysOfWeek daysOfWeek) {
+        this.daysOfWeek = daysOfWeek;
+    }
+
+    public TimetableDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(TimetableDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public TimetableDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(TimetableDate endDate) {
+        this.endDate = endDate;
+    }
 }
