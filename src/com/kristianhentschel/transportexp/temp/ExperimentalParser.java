@@ -1,11 +1,13 @@
 package com.kristianhentschel.transportexp.temp;
 
 import com.kristianhentschel.transportexp.ingest.records.uk.atoc.alf.AdditionalFixedLinksRecord;
+import com.kristianhentschel.transportexp.ingest.records.uk.atoc.cif.*;
 import com.kristianhentschel.transportexp.ingest.records.uk.atoc.flf.FixedLinksRecord;
 import com.kristianhentschel.transportexp.ingest.records.uk.atoc.msn.MasterStationNamesStationRecord;
 import com.kristianhentschel.transportexp.timetable.TimetableSystem;
 import com.kristianhentschel.transportexp.timetable.records.TimetableFixedLink;
 import com.kristianhentschel.transportexp.timetable.records.TimetableRecord;
+import com.kristianhentschel.transportexp.timetable.records.TimetableService;
 import com.kristianhentschel.transportexp.timetable.records.TimetableStop;
 import com.kristianhentschel.transportexp.timetable.utilities.TimetableDaysOfWeek;
 import com.kristianhentschel.transportexp.timetable.utilities.TimetableDuration;
@@ -49,15 +51,21 @@ public class ExperimentalParser {
         subsidiaryToPrimary = new HashMap<String, String>();
         tiplocToCode = new HashMap<String, String>();
 
-        // parse master station names file
+        Runtime R = Runtime.getRuntime();
+
+        // parse individual files in the correct order
+        System.out.println("Before loading any files: Heap Size: "+(R.totalMemory() - R.freeMemory()));
+
         parseMasterStationNames(file_msn);
-
-        // parse fixed links file
         parseFixedLinks(file_flf);
-
-        // TODO parse other files using this base data
         parseAdditionalFixedLinks(file_alf);
-        // parseTimetableFile(file_mca);
+
+        System.out.println("Before loading timetable: Heap Size: "+(R.totalMemory() - R.freeMemory()));
+        parseTimetableFile(file_mca);
+
+        System.out.println("After loading timetable: Heap Size: "+(R.totalMemory() - R.freeMemory()));
+        System.gc();
+        System.out.println("After forced GC: Heap Size: "+(R.totalMemory() - R.freeMemory()));
 
         // To see if it works, print stations from timetable system
 
@@ -65,25 +73,135 @@ public class ExperimentalParser {
         while(it.hasNext()) {
             TimetableStop stop = it.next();
             System.out.print(stop.getName());
+            System.out.print(" (" + stop.getNumStoppingServices() + " services) ");
 
-            Iterator<TimetableFixedLink> fl_it = stop.getFixedLinkIterator();
-            if(fl_it.hasNext())
-                System.out.print("\t\tFixed links: ");
-            while(fl_it.hasNext()) {
-                TimetableFixedLink fl = fl_it.next();
-                System.out.print(fl.getMode());
-                System.out.print(" to ");
-                if(fl.getOrigin()
-                        .getLocalStopId()
-                        .equals(stop.getLocalStopId())) {
-                    System.out.print(fl.getDestination().getName());
-                } else {
-                    System.out.print(fl.getOrigin().getName());
-                }
-                System.out.print(" ");
-            }
+//            Iterator<TimetableFixedLink> fl_it = stop.getFixedLinkIterator();
+//            if(fl_it.hasNext())
+//                System.out.print("\t\tFixed links: ");
+//            while(fl_it.hasNext()) {
+//                TimetableFixedLink fl = fl_it.next();
+//                System.out.print(fl.getMode());
+//                System.out.print(" to ");
+//                if(fl.getOrigin()
+//                        .getLocalStopId()
+//                        .equals(stop.getLocalStopId())) {
+//                    System.out.print(fl.getDestination().getName());
+//                } else {
+//                    System.out.print(fl.getOrigin().getName());
+//                }
+//                System.out.print(" ");
+//            }
 
             System.out.println();
+        }
+    }
+
+    private static void parseTimetableFile(File file_mca) {
+        Scanner sc;
+
+        try {
+            sc = new Scanner(file_mca);
+
+            // This parser needs some state as the order of records (BS -> BX -> LO, CR, LI, LT) is significant
+            // This state is a service. So we always keep a service object around that we can add to. It is replaced
+            // with a new blank service object when the last (LT) record for the service has been parsed.
+            TimetableService s = new TimetableService();
+
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                String recordType = line.substring(0,2);
+                switch(recordType) {
+                    case "HD":
+                        // Skip Header.
+                        break;
+                    case "TI":
+                    case "TA":
+                    case "TD":
+                        // Skip Tiploc insert/amend/delete
+                        break;
+                    case "AA":
+                        // Skip Associations
+                        break;
+                    case "BS":
+                        CifBasicScheduleRecord bs = new CifBasicScheduleRecord(line);
+
+                        // ignore this record if it is for a service deletion
+                        if (bs.getTransactionType() == AbstractCifRecord.TRANSACTION_TYPE.DELETE)
+                            break;
+
+                        // TODO: deal with UPDATE transactions if present?
+
+                        // This is the first record for a new train. The service object has already been created,
+                        // so we can just fill in the basic info here.
+
+                        // TODO: set start and end dates once implemented in record class.
+                        // s.setStartDate(bs.getDateRunsFrom());
+                        // s.setEndDate(bs.getDateRunsTo());
+                        s.setName(bs.getTrainIdentity());
+
+                        TimetableDaysOfWeek dow = new TimetableDaysOfWeek();
+                        dow.parseString(bs.getDaysRun());
+                        s.setDaysOfWeek(dow);
+                        break;
+                    case "BX":
+                        CifBasicScheduleExtraRecord bx = new CifBasicScheduleExtraRecord(line);
+                        s.setOperator(bx.getAtocCode());
+                        // The extra record does not include any other information relevant to us at this stage.
+                        break;
+                    case "LO":
+                        CifOriginLocationRecord lo = new CifOriginLocationRecord(line);
+
+                        // We only care about tiplocs associated with a station (public stops).
+                        if (tiplocToCode.containsKey(lo.getLocationTiploc())) {
+                            TimetableStop stop = getStop(tiplocToCode.get(lo.getLocationTiploc()));
+                            s.addStop(stop,
+                                    null,
+                                    TimetableTimeOfDay.fromStringHHMM(lo.getPublicDeparture()));
+                            stop.addService(s);
+                        }
+                        break;
+                    case "LI":
+                        CifIntermediateLocationRecord li = new CifIntermediateLocationRecord(line);
+                        if (tiplocToCode.containsKey(li.getLocationTiploc())) {
+                            TimetableStop stop = getStop(tiplocToCode.get(li.getLocationTiploc()));
+                            s.addStop(stop,
+                                    TimetableTimeOfDay.fromStringHHMM(li.getPublicArrival()),
+                                    TimetableTimeOfDay.fromStringHHMM(li.getPublicDeparture()));
+                            stop.addService(s);
+                        }
+                        break;
+                    case "LT":
+                        CifTerminatingLocationRecord lt = new CifTerminatingLocationRecord(line);
+                        if (tiplocToCode.containsKey(lt.getLocationTiploc())) {
+                            TimetableStop stop = getStop(tiplocToCode.get(lt.getLocationTiploc()));
+                            s.addStop(stop,
+                                    TimetableTimeOfDay.fromStringHHMM(lt.getPublicArrival()),
+                                    null);
+                            stop.addService(s);
+                        }
+                        // The Terminating location is the last record specific to this service.
+                        // We create a new one to guarantee it is there for the next service (BS record).
+                        s = new TimetableService();
+                        break;
+                    case "TN":
+                        // Skip train-specific note
+                        break;
+                    case "LN":
+                        // Skip location-specific note
+                        break;
+                    case "CR":
+                        // Skip change-on-route
+                        break;
+                    case "ZZ":
+                        // Skip trailer record
+                        break;
+                    default:
+                        System.err.println("Undefined CIF record type "+recordType);
+                }
+            }
+
+        } catch(FileNotFoundException e) {
+            System.out.println("Error opening MCA file: " + e.getMessage());
         }
     }
 

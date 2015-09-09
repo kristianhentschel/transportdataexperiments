@@ -90,4 +90,8 @@ public class TimetableStop extends TimetableRecord {
     public void setChangeTime(TimetableDuration changeTime) {
         this.changeTime = changeTime;
     }
+
+    public int getNumStoppingServices() {
+        return stoppingServices.size();
+    }
 }

@@ -12,6 +12,11 @@ public class TimetableTimeOfDay {
     private final int minute;
     private final int second;
 
+    public static TimetableTimeOfDay fromStringHHMM (String s) {
+        int h = Integer.parseInt(s.substring(0, 2));
+        int m = Integer.parseInt(s.substring(2, 4));
+        return new TimetableTimeOfDay(h, m);
+    }
     public TimetableTimeOfDay(int hour, int minute) {
         this.hour = hour;
         this.minute = minute;
