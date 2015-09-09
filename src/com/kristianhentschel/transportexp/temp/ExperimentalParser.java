@@ -44,11 +44,13 @@ public class ExperimentalParser {
 
         // TODO parse other files using this base data
 
+        // parse fixed links file
+
         // To see if it works, print stations from timetable system
         Iterator<TimetableStop> it = ts.getStopsIterator();
         while(it.hasNext()) {
             TimetableStop stop = it.next();
-            System.out.println(stop.getName() + " " + stop.getChangeTime().getMilliseconds());
+            System.out.println(stop.getName());
         }
     }
 
@@ -92,8 +94,13 @@ public class ExperimentalParser {
         // Set tiploc to three-letter-code mapping
         tiplocToCode.put(r.getTiploc(), r.getCode());
 
+        if (r.isSubsidiary()) {
+            // Ignore data other than tiploc-code mapping for subsidiaries!
+            return;
+        }
+
         // Create stop object in timetable system
-        TimetableStop stop = ts.getStop(r.getTiploc());
+        TimetableStop stop = ts.getStop(r.getCode());
 
         // Convert Location and choose Timezone
         // TODO: Using GMT non-discriminatively may be incorrect even for ATOC data (continental connections)
