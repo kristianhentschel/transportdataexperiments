@@ -134,7 +134,7 @@ public class AtocParser {
                         CifOriginLocationRecord lo = new CifOriginLocationRecord(line);
 
                         // We only care about tiplocs associated with a station (public stops).
-                        if (tiplocToCode.containsKey(lo.getLocationTiploc())) {
+                        if (tiplocToCode.containsKey(lo.getLocationTiploc()) && lo.isPublicStop()) {
                             TimetableStop stop = getStop(tiplocToCode.get(lo.getLocationTiploc()));
                             s.addStop(stop,
                                     null,
@@ -144,7 +144,7 @@ public class AtocParser {
                         break;
                     case "LI":
                         CifIntermediateLocationRecord li = new CifIntermediateLocationRecord(line);
-                        if (tiplocToCode.containsKey(li.getLocationTiploc())) {
+                        if (tiplocToCode.containsKey(li.getLocationTiploc()) && li.isPublicStop()) {
                             TimetableStop stop = getStop(tiplocToCode.get(li.getLocationTiploc()));
                             s.addStop(stop,
                                     TimetableTimeOfDay.fromStringHHMM(li.getPublicArrival()),
@@ -154,7 +154,7 @@ public class AtocParser {
                         break;
                     case "LT":
                         CifTerminatingLocationRecord lt = new CifTerminatingLocationRecord(line);
-                        if (tiplocToCode.containsKey(lt.getLocationTiploc())) {
+                        if (tiplocToCode.containsKey(lt.getLocationTiploc()) && lt.isPublic()) {
                             TimetableStop stop = getStop(tiplocToCode.get(lt.getLocationTiploc()));
                             s.addStop(stop,
                                     TimetableTimeOfDay.fromStringHHMM(lt.getPublicArrival()),

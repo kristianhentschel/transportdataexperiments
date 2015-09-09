@@ -192,4 +192,8 @@ public class CifIntermediateLocationRecord extends AbstractCifRecord {
     public boolean hasPath() {
         return path.length() > 0;
     }
+
+    public boolean isPublicStop() {
+        return !getPublicArrival().equals("0000") || !getPublicDeparture().equals("0000");
+    }
 }

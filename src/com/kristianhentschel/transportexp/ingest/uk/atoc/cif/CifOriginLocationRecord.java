@@ -133,4 +133,8 @@ public class CifOriginLocationRecord extends AbstractCifRecord {
     private void setPerformanceAllowance(String performanceAllowance) {
         this.performanceAllowance = performanceAllowance.trim();
     }
+
+    public boolean isPublicStop() {
+        return !getPublicDeparture().equals("0000");
+    }
 }

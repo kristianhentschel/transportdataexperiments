@@ -88,4 +88,8 @@ public class CifTerminatingLocationRecord extends AbstractCifRecord {
     private void setActivity(String activity) {
         this.activity = activity.trim();
     }
+
+    public boolean isPublic() {
+        return !getPublicArrival().equals("0000");
+    }
 }
