@@ -94,4 +94,13 @@ public class TimetableStop extends TimetableRecord {
     public int getNumStoppingServices() {
         return stoppingServices.size();
     }
+
+    public boolean equals(Object other) {
+        if (!(other instanceof TimetableStop)) {
+            return false;
+        } else {
+            return this.localStopId == ((TimetableStop) other).localStopId
+                    && this.dataSource == ((TimetableStop) other).dataSource;
+        }
+    }
 }

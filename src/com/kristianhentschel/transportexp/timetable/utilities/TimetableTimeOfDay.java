@@ -40,4 +40,8 @@ public class TimetableTimeOfDay {
     public int getSecond() {
         return second;
     }
+
+    public String toString() {
+        return String.format("%02d:%02d:%02d", hour, minute, second);
+    }
 }

@@ -41,4 +41,8 @@ public class TimetableDuration {
     public long getUTCTimeAfter(long startTimeUTC) {
         return startTimeUTC + milliseconds;
     }
+
+    public String toString() {
+        return Long.toString(milliseconds/1000) + " seconds";
+    }
 }

@@ -37,4 +37,8 @@ public class TimetableServiceStop {
     public TimetableTimeOfDay getDeparts() {
         return departs;
     }
+
+    public TimetableStop getStop() {
+        return stop;
+    }
 }
