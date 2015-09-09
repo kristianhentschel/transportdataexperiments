@@ -1,13 +1,16 @@
 package com.kristianhentschel.transportexp.temp;
 
+import com.kristianhentschel.transportexp.ingest.records.uk.atoc.alf.AdditionalFixedLinksRecord;
 import com.kristianhentschel.transportexp.ingest.records.uk.atoc.flf.FixedLinksRecord;
 import com.kristianhentschel.transportexp.ingest.records.uk.atoc.msn.MasterStationNamesStationRecord;
 import com.kristianhentschel.transportexp.timetable.TimetableSystem;
 import com.kristianhentschel.transportexp.timetable.records.TimetableFixedLink;
 import com.kristianhentschel.transportexp.timetable.records.TimetableRecord;
 import com.kristianhentschel.transportexp.timetable.records.TimetableStop;
+import com.kristianhentschel.transportexp.timetable.utilities.TimetableDaysOfWeek;
 import com.kristianhentschel.transportexp.timetable.utilities.TimetableDuration;
 import com.kristianhentschel.transportexp.timetable.utilities.TimetableLocation;
+import com.kristianhentschel.transportexp.timetable.utilities.TimetableTimeOfDay;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -53,7 +56,7 @@ public class ExperimentalParser {
         parseFixedLinks(file_flf);
 
         // TODO parse other files using this base data
-        // parseAdditionalFixedLinks(file_alf);
+        parseAdditionalFixedLinks(file_alf);
         // parseTimetableFile(file_mca);
 
         // To see if it works, print stations from timetable system
@@ -82,6 +85,53 @@ public class ExperimentalParser {
 
             System.out.println();
         }
+    }
+
+    private static void parseAdditionalFixedLinks(File file_alf) {
+        Scanner sc;
+
+        try {
+            sc = new Scanner(file_alf);
+
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                AdditionalFixedLinksRecord r = new AdditionalFixedLinksRecord(line);
+                parseAdditionalFixedLinksRecord(r);
+            }
+
+        } catch(FileNotFoundException e) {
+            System.out.println("Error opening ALF file: " + e.getMessage());
+        }
+    }
+
+    private static void parseAdditionalFixedLinksRecord(AdditionalFixedLinksRecord r) {
+        TimetableStop origin = getStop(r.getOrigin());
+        TimetableStop destination = getStop(r.getDestination());
+        TimetableFixedLink fl = new TimetableFixedLink();
+
+        fl.setOrigin(origin);
+        fl.setDestination(destination);
+
+        fl.setMode(r.getMode().toString());
+
+        TimetableDuration duration = new TimetableDuration();
+        duration.addMinutes(r.getTime());
+        fl.setDuration(duration);
+
+        TimetableDaysOfWeek dow = new TimetableDaysOfWeek();
+        dow.parseString(r.getDaysOfWeek());
+        fl.setDaysOfWeek(dow);
+
+        // TODO: Set start/end dates (implement a better interface in record class first!)
+        // if(r.hasEndDate()) { }
+        // if(r.hasStartDate()) { }
+
+        // TODO: Set start/end times of day (implement in TimetableFixedLink class)
+        // fl.setStartTime(new TimetableTimeOfDay(Integer.parseInt(r.getStartTime().substring(0,2))));
+        // fl.setEndTime(new TimetableTimeOfDay(Integer.parseInt(r.getEndTime().substring(2,4))));
+
+        // The additional fixed links appear to be uni-directional (duplicates exist in source file.)
+        origin.addFixedLink(fl);
     }
 
     private static void parseFixedLinks(File file_flf) {

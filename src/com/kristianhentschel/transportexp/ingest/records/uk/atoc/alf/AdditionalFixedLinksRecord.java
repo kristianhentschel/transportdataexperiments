@@ -142,6 +142,8 @@ public class AdditionalFixedLinksRecord extends CommaSeparatedKeyValuesRecord {
     }
 
     private void setDaysOfWeek(String days_of_week) {
+        if (days_of_week.length() == 0)
+            days_of_week = "1111111";
         this.days_of_week = days_of_week;
     }
 
