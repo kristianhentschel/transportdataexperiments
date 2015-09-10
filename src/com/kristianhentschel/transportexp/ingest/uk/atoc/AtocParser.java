@@ -117,8 +117,8 @@ public class AtocParser {
                         // TODO: deal with UPDATE transactions if present?
 
                         // TODO: set start and end dates once implemented in record class.
-                        // s.setStartDate(bs.getDateRunsFrom());
-                        // s.setEndDate(bs.getDateRunsTo());
+                        s.setStartDate(AbstractCifRecord.convertToTimetableDate(bs.getDateRunsFrom()));
+                        s.setEndDate(AbstractCifRecord.convertToTimetableDate(bs.getDateRunsTo()));
                         s.setName(bs.getTrainUid());
 
                         TimetableDaysOfWeek dow = new TimetableDaysOfWeek();

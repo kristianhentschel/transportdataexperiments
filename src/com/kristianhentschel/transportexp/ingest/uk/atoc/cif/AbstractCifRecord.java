@@ -1,6 +1,7 @@
 package com.kristianhentschel.transportexp.ingest.uk.atoc.cif;
 
 import com.kristianhentschel.transportexp.ingest.formats.FixedWidthRecord;
+import com.kristianhentschel.transportexp.timetable.utilities.TimetableDate;
 
 /**
  * Created by Kristian on 07/08/2015.
@@ -176,4 +177,10 @@ public abstract class AbstractCifRecord extends FixedWidthRecord {
         skipChars(2); // skip record identity
     }
 
+    public static TimetableDate convertToTimetableDate(String cifDate) {
+        int year = Integer.parseInt(cifDate.substring(0,2)) + 2000;
+        int month = Integer.parseInt(cifDate.substring(2,4));
+        int day = Integer.parseInt(cifDate.substring(4,6));
+        return new TimetableDate(year, month, day);
+    }
 }
