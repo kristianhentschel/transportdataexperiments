@@ -32,4 +32,10 @@ public class TimetableTimeOfDayTest {
         assertEquals(2, dut.getMinute());
         assertEquals(0, dut.getSecond());
     }
+
+    @Test
+    public void testToString() {
+        TimetableTimeOfDay dut = new TimetableTimeOfDay(6,15,3);
+        assertEquals("06:15:03", dut.toString());
+    }
 }

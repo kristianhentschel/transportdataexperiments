@@ -93,6 +93,14 @@ public class TimetableDaysOfWeekTest {
         s = "0000011";
         dut.parseString(s);
         assertEquals(s, daysToString(dut));
+    }
 
+    @Test
+    public void testToString() {
+        TimetableDaysOfWeek dut = new TimetableDaysOfWeek();
+        String s = "1111100";
+        dut.parseString(s);
+        assertEquals(s, daysToString(dut));
+        assertEquals(s, dut.toString());
     }
 }

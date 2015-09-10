@@ -65,6 +65,7 @@ public class AtocPlayground1 {
     private static void printServiceInfo(TimetableService service) {
         Iterator<TimetableServiceStop> scheduleIterator = service.getScheduleIterator();
 
+        System.out.printf("%s: %s service running %s from %s to %s\n", service.getName(), service.getOperator(), service.getDaysOfWeek(), service.getStartDate(), service.getEndDate());
         while (scheduleIterator.hasNext()) {
             TimetableServiceStop s = scheduleIterator.next();
 

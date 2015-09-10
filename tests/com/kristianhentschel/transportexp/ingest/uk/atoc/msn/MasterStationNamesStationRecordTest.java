@@ -40,7 +40,7 @@ public class MasterStationNamesStationRecordTest {
         assertEquals(true, dut.isEstimated());
         assertEquals(0, dut.getNorthing());
         assertEquals(15, dut.getChangeTime());
-        assertEquals(true, dut.isSubsidiary());
+        assertEquals(false, dut.isSubsidiary());
     }
 
     @Test

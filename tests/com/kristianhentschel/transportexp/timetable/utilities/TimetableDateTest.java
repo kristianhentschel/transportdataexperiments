@@ -15,4 +15,10 @@ public class TimetableDateTest {
         assertEquals(1, dut.getMonth());
         assertEquals(1, dut.getDay());
     }
+
+    @Test
+    public void testToString() {
+        TimetableDate dut = new TimetableDate(2008, 02, 29);
+        assertEquals("29/02/2008", dut.toString());
+    }
 }

@@ -29,4 +29,8 @@ public class TimetableDate {
     public int getDay() {
         return day;
     }
+
+    public String toString() {
+        return String.format("%02d/%02d/%04d", getDay(), getMonth(), getYear());
+    }
 }

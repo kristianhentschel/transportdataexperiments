@@ -65,4 +65,17 @@ public class TimetableDaysOfWeek {
     public boolean runsSundays() {
         return days.get(6);
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder(7);
+
+        for (int i = 0; i < 7; i++) {
+            if (days.get(i))
+                sb.append("1");
+            else
+                sb.append("0");
+        }
+
+        return sb.toString();
+    }
 }

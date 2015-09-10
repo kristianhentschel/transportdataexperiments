@@ -25,4 +25,14 @@ public class TimetableDurationTest {
         assertEquals(time_end, dut.getUTCTimeAfter(time_start));
     }
 
+    @Test
+    public void testToString() {
+        TimetableDuration dut = new TimetableDuration();
+        dut.addMinutes(10);
+        dut.addSeconds(30);
+
+        assertEquals(10*60*1000 + 30*1000, dut.getMilliseconds());
+        assertEquals("630 seconds", dut.toString());
+    }
+
 }
