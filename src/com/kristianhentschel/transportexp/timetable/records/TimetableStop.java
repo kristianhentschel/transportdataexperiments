@@ -20,26 +20,32 @@ public class TimetableStop extends TimetableRecord {
     private TimetableLocation location;
     private TimetableDuration changeTime;
 
-    private List<TimetableService> stoppingServices;
+    private ArrayList<TimetableServiceStop> serviceStops;
+
     private List<TimetableFixedLink> fixedLinks;
 
     private Calendar calendar;
+    private boolean serviceStopsIsSorted;
 
     public TimetableStop() {
-        stoppingServices = new ArrayList<TimetableService>();
+        serviceStops = new ArrayList<TimetableServiceStop>();
         fixedLinks = new ArrayList<TimetableFixedLink>();
-    }
-
-    public void addService(TimetableService service) {
-        stoppingServices.add(service);
+        serviceStopsIsSorted = true;
     }
 
     public void addFixedLink(TimetableFixedLink link) {
         fixedLinks.add(link);
     }
 
-    public Iterator<TimetableService> getServiceIterator() {
-        return stoppingServices.iterator();
+    /**
+     * @return an iterator over all stops in order of departure time
+     */
+    public Iterator<TimetableServiceStop> getServiceStopsIterator() {
+        if(!serviceStopsIsSorted) {
+            serviceStops.sort(null);
+            serviceStopsIsSorted = true;
+        }
+        return serviceStops.iterator();
     }
 
     public Iterator<TimetableFixedLink> getFixedLinkIterator() {
@@ -92,7 +98,7 @@ public class TimetableStop extends TimetableRecord {
     }
 
     public int getNumStoppingServices() {
-        return stoppingServices.size();
+        return serviceStops.size();
     }
 
     public boolean equals(Object other) {
@@ -102,5 +108,10 @@ public class TimetableStop extends TimetableRecord {
             return this.localStopId == ((TimetableStop) other).localStopId
                     && this.dataSource == ((TimetableStop) other).dataSource;
         }
+    }
+
+    public void addServiceStop(TimetableServiceStop serviceStop) {
+        serviceStops.add(serviceStop);
+        serviceStopsIsSorted = false;
     }
 }

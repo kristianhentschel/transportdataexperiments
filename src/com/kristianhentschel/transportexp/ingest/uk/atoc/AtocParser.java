@@ -141,7 +141,6 @@ public class AtocParser {
                             s.addStop(stop,
                                     null,
                                     TimetableTimeOfDay.fromStringHHMM(lo.getPublicDeparture()));
-                            stop.addService(s);
                         }
                         break;
                     case "LI":
@@ -151,7 +150,6 @@ public class AtocParser {
                             s.addStop(stop,
                                     TimetableTimeOfDay.fromStringHHMM(li.getPublicArrival()),
                                     TimetableTimeOfDay.fromStringHHMM(li.getPublicDeparture()));
-                            stop.addService(s);
                         }
                         break;
                     case "LT":
@@ -161,7 +159,6 @@ public class AtocParser {
                             s.addStop(stop,
                                     TimetableTimeOfDay.fromStringHHMM(lt.getPublicArrival()),
                                     null);
-                            stop.addService(s);
                         }
                         // The Terminating location is the last record specific to this service.
                         // We create a new one to guarantee it is there for the next service (BS record).

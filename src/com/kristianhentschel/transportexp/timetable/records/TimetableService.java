@@ -43,6 +43,8 @@ public class TimetableService extends TimetableRecord {
         TimetableServiceStop serviceStop = new TimetableServiceStop(this, stop);
         serviceStop.setArrives(arrives);
         serviceStop.setDeparts(departs);
+        serviceStop.setItineraryIndex(schedule.size());
+        stop.addServiceStop(serviceStop);
         schedule.add(serviceStop);
     }
 
@@ -84,5 +86,13 @@ public class TimetableService extends TimetableRecord {
 
     public void setDaysOfWeek(TimetableDaysOfWeek daysOfWeek) {
         this.daysOfWeek = daysOfWeek;
+    }
+
+    public TimetableServiceStop getServiceStop(int i) {
+        return schedule.get(i);
+    }
+
+    public int getNumServiceStops() {
+        return schedule.size();
     }
 }

@@ -87,26 +87,14 @@ public class AtocPlayground1 {
 
         // Services
         if(printServices) {
-            Iterator<TimetableService> serviceIterator = stop.getServiceIterator();
-            while (serviceIterator.hasNext()) {
-                TimetableService service = serviceIterator.next();
+            Iterator<TimetableServiceStop> it = stop.getServiceStopsIterator();
+            while (it.hasNext()) {
+                TimetableServiceStop serviceStop = it.next();
+                TimetableService service = serviceStop.getService();
                 Iterator<TimetableServiceStop> scheduleIterator = service.getScheduleIterator();
-                TimetableServiceStop first = null;
-                TimetableServiceStop current = null;
-                TimetableServiceStop last = null;
-                while(scheduleIterator.hasNext()) {
-                    TimetableServiceStop serviceStop = scheduleIterator.next();
-
-                    if(first == null) {
-                        first = serviceStop;
-                    }
-
-                    if(serviceStop.getStop().equals(stop)) {
-                        current = serviceStop;
-                    }
-
-                    last = serviceStop;
-                }
+                TimetableServiceStop first = service.getServiceStop(0);
+                TimetableServiceStop current = serviceStop;
+                TimetableServiceStop last = service.getServiceStop(service.getNumServiceStops() - 1);
 
                 TimetableTimeOfDay time = current.getDeparts() != null ? current.getDeparts() : current.getArrives();
                 System.out.printf("%s: %s service from %s to %s at %s\n", service.getName(), service.getOperator(), first.getStop().getName(), last.getStop().getName(), time);

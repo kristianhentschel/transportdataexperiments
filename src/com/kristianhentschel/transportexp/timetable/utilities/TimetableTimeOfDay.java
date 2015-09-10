@@ -7,7 +7,7 @@ package com.kristianhentschel.transportexp.timetable.utilities;
  * to the operating company or the specific stop, but this class is not aware of any time zone calculations and simply
  * records what would be printed in a timetable.
  */
-public class TimetableTimeOfDay {
+public class TimetableTimeOfDay implements Comparable {
     private final int hour;
     private final int minute;
     private final int second;
@@ -43,5 +43,12 @@ public class TimetableTimeOfDay {
 
     public String toString() {
         return String.format("%02d:%02d:%02d", hour, minute, second);
+    }
+
+    public int compareTo(Object o) {
+        if(o == null || !(o instanceof TimetableTimeOfDay))
+            return 0;
+        TimetableTimeOfDay other = (TimetableTimeOfDay)o;
+        return (hour * 60 * 60 + minute * 60 + second) - (other.getHour() * 60 * 60 + other.getMinute() * 60 + other.getSecond());
     }
 }
