@@ -38,4 +38,34 @@ public class TimetableTimeOfDayTest {
         TimetableTimeOfDay dut = new TimetableTimeOfDay(6,15,3);
         assertEquals("06:15:03", dut.toString());
     }
+
+    @Test
+    public void testCompareToSimple() {
+        TimetableTimeOfDay t1 = new TimetableTimeOfDay(0,1);
+        TimetableTimeOfDay t2 = new TimetableTimeOfDay(0,2);
+
+        assertTrue(t1.compareTo(t2) < 0);
+        assertTrue(t2.compareTo(t1) > 0);
+    }
+
+    @Test
+    public void testCompareToEquals() {
+        TimetableTimeOfDay t1 = new TimetableTimeOfDay(0,0);
+        TimetableTimeOfDay t2 = new TimetableTimeOfDay(0,0);
+
+        assertTrue(t1.compareTo(t2) == 0);
+        assertTrue(t1.equals(t2));
+    }
+
+    @Test
+    public void testCompareToTransitive() {
+        TimetableTimeOfDay t1 = new TimetableTimeOfDay(0,1);
+        TimetableTimeOfDay t2 = new TimetableTimeOfDay(0,2);
+        TimetableTimeOfDay t3 = new TimetableTimeOfDay(0,3);
+
+        assertTrue(t1.compareTo(t2) < 0);
+        assertTrue(t2.compareTo(t3) < 0);
+
+        assertTrue(t1.compareTo(t3) < 0);
+    }
 }

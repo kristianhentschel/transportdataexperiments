@@ -49,6 +49,35 @@ public class TimetableTimeOfDay implements Comparable {
         if(o == null || !(o instanceof TimetableTimeOfDay))
             return 0;
         TimetableTimeOfDay other = (TimetableTimeOfDay)o;
-        return (hour * 60 * 60 + minute * 60 + second) - (other.getHour() * 60 * 60 + other.getMinute() * 60 + other.getSecond());
+
+        int t1 = hour * 60 * 60 + minute * 60 + second;
+        int t2 = other.getHour() * 60 * 60 + other.getMinute() * 60 + other.getSecond();
+
+        if (t1 > t2)
+            return 1;
+
+        if (t1 < t2)
+            return -1;
+
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof TimetableTimeOfDay))
+            return false;
+
+        TimetableTimeOfDay other = (TimetableTimeOfDay)o;
+
+        if (hour != other.getHour())
+            return false;
+
+        if (minute != other.getMinute())
+            return false;
+
+        if (second != other.getSecond())
+            return false;
+
+        return true;
     }
 }

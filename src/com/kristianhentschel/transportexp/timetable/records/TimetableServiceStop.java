@@ -61,9 +61,20 @@ public class TimetableServiceStop implements Comparable {
     public int compareTo(Object o) {
         if (!(o instanceof TimetableServiceStop))
             return 0;
-        if(getDeparts() == null)
-            return 0;
 
-        return getDeparts().compareTo(((TimetableServiceStop)o).getDeparts());
+        TimetableServiceStop other = (TimetableServiceStop)o;
+
+        // if both have a departure time, use that.
+        if (getDeparts() != null && other.getDeparts() != null)
+            return getDeparts().compareTo(other.getDeparts());
+
+        // if not, and if both have an arrival time, use that instead.
+        if (getArrives() != null && other.getArrives() != null)
+            return getArrives().compareTo(other.getArrives());
+
+        // finally, if they don't have the same kind of arrival/departure time, assume they are equal.
+        // TODO: this is not quite logical. If they both have exactly one kind of time set, those
+        // should be compared.
+        return 0;
     }
 }

@@ -38,7 +38,7 @@ public class TimetableStop extends TimetableRecord {
     }
 
     /**
-     * @return an iterator over all stops in order of departure time
+     * @return an iterator over all timetable service stops in order
      */
     public Iterator<TimetableServiceStop> getServiceStopsIterator() {
         if(!serviceStopsIsSorted) {
