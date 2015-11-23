@@ -6,6 +6,7 @@ import com.kristianhentschel.transportexp.timetable.records.TimetableFixedLink;
 import com.kristianhentschel.transportexp.timetable.records.TimetableService;
 import com.kristianhentschel.transportexp.timetable.records.TimetableServiceStop;
 import com.kristianhentschel.transportexp.timetable.records.TimetableStop;
+import com.kristianhentschel.transportexp.timetable.utilities.TimetableDate;
 import com.kristianhentschel.transportexp.timetable.utilities.TimetableTimeOfDay;
 
 import java.util.Iterator;
@@ -15,7 +16,12 @@ import java.util.Scanner;
  * Created by Kristian on 09/09/2015.
  */
 public class AtocPlayground1 {
-    static TimetableSystem ts;
+    private static TimetableSystem ts;
+
+    private static boolean printServices = true;
+    private static boolean printFixedLinks = false;
+    private static TimetableDate date = null;
+
     public static void main(String args[]) {
 
         // get the data;
@@ -26,9 +32,6 @@ public class AtocPlayground1 {
 
         // Now, do something with this data
         Scanner inputScanner = new Scanner(System.in);
-
-        boolean printServices = true;
-        boolean printFixedLinks = false;
 
         while(inputScanner.hasNext()) {
             String request = inputScanner.next();
@@ -48,6 +51,17 @@ public class AtocPlayground1 {
             if (request.equals("pfl")) {
                 printFixedLinks = !printFixedLinks;
                 System.out.println("printing fixed links " + (printFixedLinks ? "enabled" : "disabled"));
+                continue;
+            }
+
+            if (request.matches("[0-9]{2}/[0-9]{2}/[0-9]{4}")) {
+                Scanner sc = new Scanner(request);
+                sc.useDelimiter("/");
+                int day     = sc.nextInt();
+                int month   = sc.nextInt();
+                int year    = sc.nextInt();
+                date = new TimetableDate(year, month, day);
+                System.out.printf("Filtering to only show services operating on %s.\n", date);
                 continue;
             }
 
@@ -91,6 +105,10 @@ public class AtocPlayground1 {
             while (it.hasNext()) {
                 TimetableServiceStop serviceStop = it.next();
                 TimetableService service = serviceStop.getService();
+
+                if (date != null && date.inRange(service.getStartDate(), service.getEndDate()))
+                    continue;
+
                 Iterator<TimetableServiceStop> scheduleIterator = service.getScheduleIterator();
                 TimetableServiceStop first = service.getServiceStop(0);
                 TimetableServiceStop current = serviceStop;
