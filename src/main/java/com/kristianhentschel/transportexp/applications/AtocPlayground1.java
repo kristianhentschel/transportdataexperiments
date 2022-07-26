@@ -83,7 +83,7 @@ public class AtocPlayground1 {
         while (scheduleIterator.hasNext()) {
             TimetableServiceStop s = scheduleIterator.next();
 
-            System.out.printf("ARR %s DEP %s \t %s\n", s.getArrives(), s.getDeparts(), s.getStop().getName());
+            System.out.printf("ARR %s DEP %s \t %s/%s\n", s.getArrives(), s.getDeparts(), s.getStop().getName(), s.getStop().getLocalStopId());
         }
     }
 
@@ -106,8 +106,10 @@ public class AtocPlayground1 {
                 TimetableServiceStop serviceStop = it.next();
                 TimetableService service = serviceStop.getService();
 
-                if (date != null && date.inRange(service.getStartDate(), service.getEndDate()))
+                // TODO this only checks start and end date, not day of the week.
+                if (date != null && !date.inRange(service.getStartDate(), service.getEndDate()))
                     continue;
+
 
                 Iterator<TimetableServiceStop> scheduleIterator = service.getScheduleIterator();
                 TimetableServiceStop first = service.getServiceStop(0);
@@ -115,7 +117,7 @@ public class AtocPlayground1 {
                 TimetableServiceStop last = service.getServiceStop(service.getNumServiceStops() - 1);
 
                 TimetableTimeOfDay time = current.getDeparts() != null ? current.getDeparts() : current.getArrives();
-                System.out.printf("%s: %s service from %s to %s at %s\n", service.getName(), service.getOperator(), first.getStop().getName(), last.getStop().getName(), time);
+                System.out.printf("%s: %s service from %s/%s to %s/%s at %s\n", service.getName(), service.getOperator(), first.getStop().getName(), first.getStop().getLocalStopId(), last.getStop().getName(), last.getStop().getLocalStopId(), time);
             }
         }
     }

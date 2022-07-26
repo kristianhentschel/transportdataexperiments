@@ -36,3 +36,15 @@ Results will be in `build/reports/tests/test/index.html`.
 ```
 java -cp build/libs/transportdataexperiments.jar com.kristianhentschel.transportexp.applications.AtocPlayground1 data/ttf331/
 ```
+
+## Usage - AtocPlayground1
+
+Enter a date in DD/MM/YYYY format, a command, a stop identifier, or a service identifier, followed by a line break.
+
+* `q` quit
+* `ps` print services: toggle whether the list of services is printed for a query.
+* `pfl` print fixed links: toggle whether the list of fixed links are printed for a query.
+* A _date_ (such as `26/07/2022`) activates a filter to only show services scheduled for that day.
+* A _stop_ (such as `GLC` or `EUS`) prints information about the stop, including services and fixed links if enabled.
+* A _service_ (such as `L36904`, usually found by listing all services for a stop) prints information about the service including all its stops.
+

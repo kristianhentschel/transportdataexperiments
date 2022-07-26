@@ -2,13 +2,15 @@ package com.kristianhentschel.transportexp.timetable.records;
 
 import com.kristianhentschel.transportexp.timetable.utilities.TimetableTimeOfDay;
 
+abstract class TimetableServiceStopComparable {}
+
 /**
  * Created by Kristian on 08/09/2015.
  *
  * A stop, or calling point, in a timetable schedule's list of stops. It is, basically,
  * a glorified triple of the stop (station) and the arrival and departure times.
  */
-public class TimetableServiceStop implements Comparable {
+public class TimetableServiceStop extends TimetableServiceStopComparable implements Comparable<TimetableServiceStopComparable> {
     private TimetableService service;
     private TimetableStop stop;
     private TimetableTimeOfDay arrives;
@@ -58,7 +60,7 @@ public class TimetableServiceStop implements Comparable {
     /**
      * The comparison is based on the time of day for scheduled arrival or departure times.
      */
-    public int compareTo(Object o) {
+    public int compareTo(TimetableServiceStopComparable o) {
         if (!(o instanceof TimetableServiceStop))
             return 0;
 
@@ -72,9 +74,13 @@ public class TimetableServiceStop implements Comparable {
         if (getArrives() != null && other.getArrives() != null)
             return getArrives().compareTo(other.getArrives());
 
-        // finally, if they don't have the same kind of arrival/departure time, assume they are equal.
-        // TODO: this is not quite logical. If they both have exactly one kind of time set, those
-        // should be compared.
+        // If they both only have exactly one kind of time set compare those.
+        if (getDeparts() != null && other.getArrives() != null)
+          return getDeparts().compareTo(other.getArrives());
+        if (getArrives() != null && other.getDeparts() != null)
+          return getArrives().compareTo(other.getDeparts());
+
+        // finally, if at least one of them doesn't have either tiem, assume they are equal.
         return 0;
     }
 }
