@@ -90,7 +90,7 @@ public class AtocParser {
             // This parser needs some state as the order of records (BS -> BX -> LO, CR, LI, LT) is significant
             // This state is a service. So we always keep a service object around that we can add to. It is replaced
             // with a new blank service object when the last (LT) record for the service has been parsed.
-            TimetableService s = new TimetableService();
+            TimetableService s = null;
 
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
@@ -108,15 +108,15 @@ public class AtocParser {
                         // Skip Associations
                         break;
                     case "BS":
+                        // BS should be the first record for a service.
+                        s = new TimetableService();
+
                         CifBasicScheduleRecord bs = new CifBasicScheduleRecord(line);
 
                         // ignore this record if it is for a service deletion
                         if (bs.getTransactionType() == AbstractCifRecord.TRANSACTION_TYPE.DELETE)
                             break;
 
-                        // TODO: deal with UPDATE transactions if present?
-
-                        // TODO: set start and end dates once implemented in record class.
                         s.setStartDate(AbstractCifRecord.convertToTimetableDate(bs.getDateRunsFrom()));
                         s.setEndDate(AbstractCifRecord.convertToTimetableDate(bs.getDateRunsTo()));
                         s.setName(bs.getTrainUid());
@@ -129,11 +129,20 @@ public class AtocParser {
                         break;
                     case "BX":
                         CifBasicScheduleExtraRecord bx = new CifBasicScheduleExtraRecord(line);
+                        if (s == null) {
+                          System.out.println("Got BX before BS");
+                          break;
+                        }
                         s.setOperator(bx.getAtocCode());
                         // The extra record does not include any other information relevant to us at this stage.
                         break;
                     case "LO":
                         CifOriginLocationRecord lo = new CifOriginLocationRecord(line);
+
+                        if (s == null) {
+                          System.out.println("Got LO before BS");
+                          break;
+                        }
 
                         // We only care about tiplocs associated with a station (public stops).
                         if (tiplocToCode.containsKey(lo.getLocationTiploc()) && lo.isPublicStop()) {
@@ -145,6 +154,11 @@ public class AtocParser {
                         break;
                     case "LI":
                         CifIntermediateLocationRecord li = new CifIntermediateLocationRecord(line);
+                        if (s == null) {
+                          System.out.println("Got LI before BS");
+                          break;
+                        }
+
                         if (tiplocToCode.containsKey(li.getLocationTiploc()) && li.isPublicStop()) {
                             TimetableStop stop = getStop(tiplocToCode.get(li.getLocationTiploc()));
                             s.addStop(stop,
@@ -153,6 +167,11 @@ public class AtocParser {
                         }
                         break;
                     case "LT":
+                        if (s == null) {
+                          System.out.println("Got LT before BS");
+                          break;
+                        }
+
                         CifTerminatingLocationRecord lt = new CifTerminatingLocationRecord(line);
                         if (tiplocToCode.containsKey(lt.getLocationTiploc()) && lt.isPublic()) {
                             TimetableStop stop = getStop(tiplocToCode.get(lt.getLocationTiploc()));
@@ -160,9 +179,6 @@ public class AtocParser {
                                     TimetableTimeOfDay.fromStringHHMM(lt.getPublicArrival()),
                                     null);
                         }
-                        // The Terminating location is the last record specific to this service.
-                        // We create a new one to guarantee it is there for the next service (BS record).
-                        s = new TimetableService();
                         break;
                     case "TN":
                         // Skip train-specific note

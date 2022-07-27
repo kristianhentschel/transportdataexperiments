@@ -46,5 +46,5 @@ Enter a date in DD/MM/YYYY format, a command, a stop identifier, or a service id
 * `pfl` print fixed links: toggle whether the list of fixed links are printed for a query.
 * A _date_ (such as `26/07/2022`) activates a filter to only show services scheduled for that day.
 * A _stop_ (such as `GLC` or `EUS`) prints information about the stop, including services and fixed links if enabled.
-* A _service_ (such as `L36904`, usually found by listing all services for a stop) prints information about the service including all its stops.
+* A _service_ (such as `Y58732.16/05/2022.09/12/2022.1111100`, found by listing all services for a stop) prints information about the service including all its stops.
 

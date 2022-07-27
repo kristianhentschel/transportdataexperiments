@@ -95,4 +95,8 @@ public class TimetableService extends TimetableRecord {
     public int getNumServiceStops() {
         return schedule.size();
     }
+
+    public String getUniqueId() {
+        return String.format("%s.%s.%s.%s", this.getName(), this.getStartDate(), this.getEndDate(), this.getDaysOfWeek());
+    }
 }

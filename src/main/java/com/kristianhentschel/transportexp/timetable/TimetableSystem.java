@@ -60,7 +60,7 @@ public class TimetableSystem {
     }
 
     public void addService(TimetableService s) {
-        services.put(s.getName(), s);
+        services.put(s.getUniqueId(), s);
     }
 
     public boolean hasService(String serviceName) {

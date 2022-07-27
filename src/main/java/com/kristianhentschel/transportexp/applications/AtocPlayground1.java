@@ -117,7 +117,7 @@ public class AtocPlayground1 {
                 TimetableServiceStop last = service.getServiceStop(service.getNumServiceStops() - 1);
 
                 TimetableTimeOfDay time = current.getDeparts() != null ? current.getDeparts() : current.getArrives();
-                System.out.printf("%s: %s service from %s/%s to %s/%s at %s\n", service.getName(), service.getOperator(), first.getStop().getName(), first.getStop().getLocalStopId(), last.getStop().getName(), last.getStop().getLocalStopId(), time);
+                System.out.printf("%s: %s service from %s/%s to %s/%s at %s\n", service.getUniqueId(), service.getOperator(), first.getStop().getName(), first.getStop().getLocalStopId(), last.getStop().getName(), last.getStop().getLocalStopId(), time);
             }
         }
     }
