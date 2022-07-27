@@ -106,15 +106,25 @@ public class AtocPlayground1 {
                 TimetableServiceStop serviceStop = it.next();
                 TimetableService service = serviceStop.getService();
 
-                // TODO this only checks start and end date, not day of the week.
-                if (date != null && !date.inRange(service.getStartDate(), service.getEndDate()))
-                    continue;
-
 
                 Iterator<TimetableServiceStop> scheduleIterator = service.getScheduleIterator();
                 TimetableServiceStop first = service.getServiceStop(0);
                 TimetableServiceStop current = serviceStop;
                 TimetableServiceStop last = service.getServiceStop(service.getNumServiceStops() - 1);
+
+                if (date != null) {
+                  // requested date is not within active period for the service
+                  if (!date.inRange(service.getStartDate(), service.getEndDate())) {
+                      // System.out.printf("%s does not run on this date.\n", service.getUniqueId());
+                      continue;
+                  }
+
+                  // requested date is not a day of the week on which the service runs
+                  if (!service.getDaysOfWeek().getDay(date.getDayOfWeek(first.getStop().getCalendar()))) {
+                      // System.out.printf("%s does not run on this day of the week (%s).\n", service.getUniqueId(), date.getDayOfWeek(first.getStop().getCalendar()));
+                      continue;
+                  }
+                }
 
                 TimetableTimeOfDay time = current.getDeparts() != null ? current.getDeparts() : current.getArrives();
                 System.out.printf("%s: %s service from %s/%s to %s/%s at %s\n", service.getUniqueId(), service.getOperator(), first.getStop().getName(), first.getStop().getLocalStopId(), last.getStop().getName(), last.getStop().getLocalStopId(), time);

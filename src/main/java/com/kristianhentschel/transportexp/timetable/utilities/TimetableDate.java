@@ -1,5 +1,7 @@
 package com.kristianhentschel.transportexp.timetable.utilities;
 
+import java.util.*;
+
 /**
  * Created by Kristian on 13/08/2015.
  *
@@ -75,5 +77,13 @@ public class TimetableDate implements Comparable{
         if (this.compareTo(end) > 0)
             return false;
         return true;
+    }
+
+    public int getDayOfWeek(Calendar calendar) {
+      Date date = new Date(this.getYear(), this.getMonth(), this.getDay());
+
+      calendar.setFirstDayOfWeek(Calendar.MONDAY);
+      calendar.setTime(date);
+      return calendar.get(Calendar.DAY_OF_WEEK) - 1;
     }
 }

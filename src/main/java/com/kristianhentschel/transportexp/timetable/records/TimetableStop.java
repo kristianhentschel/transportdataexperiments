@@ -24,7 +24,6 @@ public class TimetableStop extends TimetableRecord {
 
     private List<TimetableFixedLink> fixedLinks;
 
-    private Calendar calendar;
     private boolean serviceStopsIsSorted;
 
     public TimetableStop() {
@@ -52,11 +51,11 @@ public class TimetableStop extends TimetableRecord {
         return fixedLinks.iterator();
     }
 
-    private Calendar getCalendar(){
-        if (calendar != null)
-            return calendar;
-        else
-            return calendar = Calendar.getInstance(TimeZone.getTimeZone(location.getTimeZoneID())); // TODO requires initialised location!
+    public Calendar getCalendar(){
+        if (location != null) 
+          return Calendar.getInstance(TimeZone.getTimeZone(location.getTimeZoneID()));
+
+        return Calendar.getInstance(TimeZone.getTimeZone("GMT"));
     }
 
     public long getUTCTime(TimetableDate date, TimetableTimeOfDay time) {
