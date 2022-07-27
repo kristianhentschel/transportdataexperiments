@@ -48,3 +48,7 @@ Enter a date in DD/MM/YYYY format, a command, a stop identifier, or a service id
 * A _stop_ (such as `GLC` or `EUS`) prints information about the stop, including services and fixed links if enabled.
 * A _service_ (such as `Y58732.16/05/2022.09/12/2022.1111100`, found by listing all services for a stop) prints information about the service including all its stops.
 
+## References
+
+* https://data.atoc.org/sites/all/themes/atoc/files/RSPS5046.pdf
+* https://wiki.openraildata.com/index.php?title=CIF_Schedule_Records
